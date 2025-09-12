@@ -30,6 +30,8 @@ kotlinxCoroutines = "1.10.1"
 
 #datetime
 kotlinxDatetime = "0.6.1"
+appcompat = "1.7.1"
+material = "1.13.0"
 
 
 
@@ -77,6 +79,8 @@ kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-cor
 
 #datetime
 kotlinx-datetime = { group = "org.jetbrains.kotlinx", name = "kotlinx-datetime", version.ref = "kotlinxDatetime" }
+androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 
 
 
@@ -93,5 +97,6 @@ ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 
 #navigation
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+android-library = { id = "com.android.library", version.ref = "agp" }
 
 

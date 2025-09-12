@@ -20,5 +20,17 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "Pixel"
+
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 include(":app")
- 
+include(":core:data")
+include(":core:database")
+include(":core:designsystem")
+include(":core:model")
+include(":core:network")
+include(":feature:foryou")
+include(":feature:settings")
+include(":feature:topic")
+include(":feature:bookmarks")
+include(":feature:interests")
+include(":sync:work")
