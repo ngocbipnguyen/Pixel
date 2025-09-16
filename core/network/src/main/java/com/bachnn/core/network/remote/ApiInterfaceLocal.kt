@@ -10,9 +10,19 @@ import javax.inject.Singleton
 interface ApiInterfaceLocal {
 
     @GET("collections.json")
-    suspend fun getCollections(): NetworkResponse<List<Collection>>
+    suspend fun getCollections(): List<Collection>
+
+    @GET("collections.json")
+    suspend fun getCollectionsById(id: String): Collection
+
 
     @GET("medias.json")
-    suspend fun getMedias(): NetworkResponse<List<PixelsPhoto>>
+    suspend fun getMedias(): List<PixelsPhoto>
 
+    @GET("medias.json")
+    suspend fun getMediasByIdCollection(idCollection: String): List<PixelsPhoto>
+
+
+    @GET("medias.json")
+    suspend fun getMediasById(id: Long): PixelsPhoto
 }

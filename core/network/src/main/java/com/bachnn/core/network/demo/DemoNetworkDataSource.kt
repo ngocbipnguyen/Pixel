@@ -1,14 +1,14 @@
-package com.bachnn.core.network.retrofit
+package com.bachnn.core.network.demo
 
 import com.bachnn.core.network.NetworkDataSource
 import com.bachnn.core.network.model.Collection
 import com.bachnn.core.network.model.PixelsPhoto
 import com.bachnn.core.network.remote.ApiInterfaceLocal
 import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
-class NetworkRetrofit @Inject constructor(val apiInterfaceLocal: ApiInterfaceLocal): NetworkDataSource  {
+class DemoNetworkDataSource @Inject constructor(
+    val apiInterfaceLocal: ApiInterfaceLocal
+): NetworkDataSource {
     override suspend fun getCollections(): List<Collection> {
         return apiInterfaceLocal.getCollections()
     }

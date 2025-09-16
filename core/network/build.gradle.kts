@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.hilt)
     alias(libs.plugins.ksp)
+    id("org.jetbrains.kotlin.kapt")
 }
 
 android {
@@ -12,7 +13,7 @@ android {
     defaultConfig {
         minSdk = 24
 
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = "com.bachnn.core.network.CustomHiltTestRunner"
         consumerProguardFiles("consumer-rules.pro")
     }
 
@@ -57,10 +58,16 @@ dependencies {
     implementation(libs.kotlinx.serialization.json)
 
     implementation(libs.kotlinx.coroutines.core)
-    testImplementation(libs.kotlinx.coroutines.test)
-    testImplementation(kotlin("test"))
+    androidTestImplementation(libs.kotlinx.coroutines.test)
+    androidTestImplementation(kotlin("test"))
 
     implementation(libs.kotlinx.datetime)
 
+
+    androidTestImplementation(libs.hilt.android.testing)
+//    kaptAndroidTest(libs.hilt.compiler.test)
+
+//    testImplementation(libs.hilt.android.testing)
+//    kaptTest(libs.hilt.compiler.test)
 
 }

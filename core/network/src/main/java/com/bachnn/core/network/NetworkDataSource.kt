@@ -7,6 +7,11 @@ interface NetworkDataSource {
 
     suspend fun getCollections(): List<Collection>
 
+    suspend fun getCollectionsById(id: String): Collection?
+
     suspend fun getMedias(): List<PixelsPhoto>
 
+    suspend fun getMediasByIdCollection(idCollection: String): List<PixelsPhoto>?
+
+    suspend fun getMediasById(id: Long): PixelsPhoto?
 }
