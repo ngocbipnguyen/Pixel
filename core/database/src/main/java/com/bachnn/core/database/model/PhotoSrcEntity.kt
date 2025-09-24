@@ -1,11 +1,13 @@
 package com.bachnn.core.database.model
 
 import androidx.room.Entity
+import androidx.room.PrimaryKey
 
 @Entity(
     tableName = "photo_src",
 )
 data class PhotoSrcEntity(
+    @PrimaryKey
     val original: String,
     val large2x: String,
     val large: String,

@@ -11,7 +11,7 @@ import com.bachnn.core.database.model.PhotoSrcEntity
 import com.bachnn.core.database.model.PixelsPhotoEntity
 
 @Database(
-    entities = [CollectionEntity::class, PixelsPhotoEntity::class, PhotoSrcEntity::class, CollectionWithPhotos::class],
+    entities = [CollectionEntity::class, PixelsPhotoEntity::class],
     version = 1,
     exportSchema = false
 )

@@ -12,8 +12,7 @@ android {
 
     defaultConfig {
         minSdk = 24
-
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = "com.bachnn.core.database.CustomHiltTestRunner"
         consumerProguardFiles("consumer-rules.pro")
     }
 
@@ -52,5 +51,10 @@ dependencies {
     // hilt
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
+
+
+    androidTestImplementation(libs.kotlinx.coroutines.test)
+    androidTestImplementation(kotlin("test"))
+    androidTestImplementation(libs.hilt.android.testing)
 
 }
