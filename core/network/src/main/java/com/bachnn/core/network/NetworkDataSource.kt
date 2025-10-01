@@ -1,6 +1,7 @@
 package com.bachnn.core.network
 
 import com.bachnn.core.network.model.Collection
+import com.bachnn.core.network.model.NetworkChangeList
 import com.bachnn.core.network.model.PixelsPhoto
 
 interface NetworkDataSource {
@@ -14,4 +15,7 @@ interface NetworkDataSource {
     suspend fun getMediasByIdCollection(idCollection: String): List<PixelsPhoto>?
 
     suspend fun getMediasById(id: Long): PixelsPhoto?
+
+    suspend fun getCollectionChangeList(after: Int? = null): List<NetworkChangeList>
+
 }

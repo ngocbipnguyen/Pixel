@@ -34,4 +34,11 @@ interface CollectionDao {
     @Query("SELECT * FROM collections")
     suspend fun getAllCollectionsWithPhotos(): List<CollectionWithPhotos>
 
+    @Query(
+        value = """
+            DELETE FROM collections
+            WHERE id in (:ids)
+        """,
+    )
+    suspend fun deleteTopics(ids: List<String>)
 }

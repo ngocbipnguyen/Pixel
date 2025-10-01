@@ -1,4 +1,5 @@
-package com.bachnn.data
+package com.bachnn.data.model
+
 
 data class Collection(
     val id: String,

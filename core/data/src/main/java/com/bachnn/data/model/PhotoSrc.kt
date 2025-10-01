@@ -1,4 +1,4 @@
-package com.bachnn.data
+package com.bachnn.data.model
 
 data class PhotoSrc(
     val original: String,

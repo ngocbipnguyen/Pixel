@@ -20,5 +20,11 @@ interface PhotoDao {
 
     @Query("SELECT* FROM pixels_photos")
     suspend fun getPixelPhotos(): List<PixelsPhotoEntity>
-
+    @Query(
+        value = """
+            DELETE FROM pixels_photos
+            WHERE id in (:ids)
+        """,
+    )
+    suspend fun deleteTopics(ids: List<String>)
 }

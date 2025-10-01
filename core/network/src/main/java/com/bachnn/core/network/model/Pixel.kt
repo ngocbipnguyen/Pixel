@@ -1,5 +1,7 @@
 package com.bachnn.core.network.model
 
+import com.bachnn.core.database.model.PhotoSrcEntity
+import com.bachnn.core.database.model.PixelsPhotoEntity
 import com.google.gson.annotations.SerializedName
 import kotlinx.serialization.Serializable
 
@@ -22,6 +24,20 @@ data class PixelsPhoto(
     val src: PhotoSrc
 )
 
+fun PixelsPhoto.asExternalModel() = PixelsPhotoEntity(
+    id = id,
+    idCollection = idCollection,
+    type = type,
+    photographer = photographer,
+    photographerId = photographerId,
+    photographerUrl = photographerUrl,
+    url = url,
+    width = width,
+    height = height,
+    avgColor = avgColor,
+    src = src.asExternalModel()
+)
+
 @Serializable
 data class PhotoSrc(
     val original: String,
@@ -32,4 +48,15 @@ data class PhotoSrc(
     val portrait: String,
     val landscape: String,
     val tiny: String
+)
+
+fun PhotoSrc.asExternalModel() = PhotoSrcEntity(
+    original = original,
+    large = large,
+    large2x = large2x,
+    medium = medium,
+    small = small,
+    portrait = portrait,
+    landscape = landscape,
+    tiny = tiny
 )

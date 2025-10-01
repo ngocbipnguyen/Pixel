@@ -2,6 +2,7 @@ package com.bachnn.core.network.demo
 
 import com.bachnn.core.network.NetworkDataSource
 import com.bachnn.core.network.model.Collection
+import com.bachnn.core.network.model.NetworkChangeList
 import com.bachnn.core.network.model.PixelsPhoto
 import com.bachnn.core.network.remote.ApiInterfaceLocal
 import javax.inject.Inject
@@ -27,5 +28,9 @@ class DemoNetworkDataSource @Inject constructor(
 
     override suspend fun getMediasById(id: Long): PixelsPhoto? {
         return apiInterfaceLocal.getMedias().find { it.id == id }
+    }
+
+    override suspend fun getCollectionChangeList(after: Int?): List<NetworkChangeList> {
+        TODO("Not yet implemented")
     }
 }

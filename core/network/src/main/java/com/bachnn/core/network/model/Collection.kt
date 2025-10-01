@@ -1,5 +1,6 @@
 package com.bachnn.core.network.model
 
+import com.bachnn.core.database.model.CollectionEntity
 import com.google.gson.annotations.SerializedName
 import kotlinx.serialization.Serializable
 
@@ -18,3 +19,17 @@ data class Collection(
     val videosCount: Int,
     val medias: List<PhotoSrc>
 )
+
+fun Collection.asExternalModel(): CollectionEntity {
+
+    return CollectionEntity(
+        id = id,
+        title = title,
+        description = description,
+        isPrivate = isPrivate,
+        mediaCount = mediaCount,
+        photosCount = photosCount,
+        videosCount = videosCount
+    )
+
+}
