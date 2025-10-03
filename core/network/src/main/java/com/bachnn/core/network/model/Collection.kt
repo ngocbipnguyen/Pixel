@@ -17,7 +17,8 @@ data class Collection(
     val photosCount: Int,
     @SerializedName("videos_count")
     val videosCount: Int,
-    val medias: List<PhotoSrc>
+    val medias: List<PhotoSrc>,
+    val timestamps: Long
 )
 
 fun Collection.asExternalModel(): CollectionEntity {
@@ -29,7 +30,8 @@ fun Collection.asExternalModel(): CollectionEntity {
         isPrivate = isPrivate,
         mediaCount = mediaCount,
         photosCount = photosCount,
-        videosCount = videosCount
+        videosCount = videosCount,
+        timestamps = timestamps
     )
 
 }

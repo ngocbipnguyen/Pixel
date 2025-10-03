@@ -11,5 +11,6 @@ data class PixelsPhoto(
     val width: Int,
     val height: Int,
     val avgColor: String,
-    val src: PhotoSrc
+    val src: PhotoSrc,
+    val timestamps: Long,
 )

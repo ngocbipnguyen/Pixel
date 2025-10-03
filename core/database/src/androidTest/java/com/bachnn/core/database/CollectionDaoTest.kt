@@ -40,6 +40,7 @@ class CollectionDaoTest {
             mediaCount = 68,
             photosCount = 59,
             videosCount = 9,
+            timestamps = 1759307220
         )
 
         collectionDao.insertCollection(collection)
@@ -64,6 +65,7 @@ class CollectionDaoTest {
                 mediaCount = 68,
                 photosCount = 59,
                 videosCount = 9,
+                timestamps = 1759307220
             ),
             CollectionEntity(
                 id = "mi3up33",
@@ -73,6 +75,7 @@ class CollectionDaoTest {
                 mediaCount = 60,
                 photosCount = 60,
                 videosCount = 0,
+                timestamps = 1759307210
             ),
             CollectionEntity(
                 id = "vlhsvu3",
@@ -82,6 +85,7 @@ class CollectionDaoTest {
                 mediaCount = 123,
                 photosCount = 100,
                 videosCount = 23,
+                timestamps = 1759307200
             )
         )
 

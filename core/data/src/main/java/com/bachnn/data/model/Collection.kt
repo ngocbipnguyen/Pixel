@@ -9,5 +9,6 @@ data class Collection(
     val mediaCount: Int,
     val photosCount: Int,
     val videosCount: Int,
+    val timestamps: Long,
     val medias: List<PixelsPhoto>
 )

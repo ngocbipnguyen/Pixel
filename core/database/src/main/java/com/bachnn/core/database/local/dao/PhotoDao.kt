@@ -27,4 +27,8 @@ interface PhotoDao {
         """,
     )
     suspend fun deleteTopics(ids: List<String>)
+
+
+    @Query("SELECT MAX(timestamps) FROM pixels_photos")
+    suspend fun getLatestTimestamp(): Long?
 }

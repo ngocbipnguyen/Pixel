@@ -15,29 +15,22 @@ class FirstPixelRepository @Inject constructor(
     private val networkRetrofit: NetworkRetrofit
 ): PixelPhotoRepository {
     override suspend fun getPhotos(): List<PixelsPhoto> {
+        val localTimestamp = pixelDao.getLatestTimestamp()
+        getPhotosByTimestamps(localTimestamp!!)
         return pixelDao.getPixelPhotos().map { it -> it.asExternalModel() }
+    }
+
+    suspend fun getPhotosByTimestamps(timestamp: Long) {
+        val photos = networkRetrofit.getMedias()
+        val networkTimestamp = photos.maxByOrNull { it.timestamps }
+        if (networkTimestamp?.timestamps!! > timestamp) {
+            val updatePhotos = photos.filter { it.timestamps > timestamp }
+            pixelDao.insertPixelPhotos(updatePhotos.map { it -> it.asExternalModel() })
+        }
     }
 
     override suspend fun getPhoto(id: Int): PixelsPhoto {
         return pixelDao.getPixelPhotoById(id).asExternalModel()
     }
 
-    override suspend fun syncWith(synchronizer: Synchronizer): Boolean {
-        return synchronizer.changeListSync(
-            versionReader = ChangeListVersions::topicVersion,
-            changeListFetcher = { currentVersion ->
-                networkRetrofit.getCollectionChangeList(currentVersion)
-            },
-            versionUpdater = {latestVersion ->
-                copy(topicVersion = latestVersion)
-            },
-            modelDeleter = pixelDao::deleteTopics,
-            modelUpdater = { id ->
-                val collection = networkRetrofit.getMedias().map {
-                        it -> it.asExternalModel()
-                }
-                pixelDao.insertPixelPhotos(collection)
-            }
-        )
-    }
 }

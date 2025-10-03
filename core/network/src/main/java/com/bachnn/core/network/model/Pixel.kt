@@ -21,7 +21,8 @@ data class PixelsPhoto(
     val height: Int,
     @SerializedName("avg_color")
     val avgColor: String,
-    val src: PhotoSrc
+    val src: PhotoSrc,
+    val timestamps: Long
 )
 
 fun PixelsPhoto.asExternalModel() = PixelsPhotoEntity(
@@ -35,7 +36,8 @@ fun PixelsPhoto.asExternalModel() = PixelsPhotoEntity(
     width = width,
     height = height,
     avgColor = avgColor,
-    src = src.asExternalModel()
+    src = src.asExternalModel(),
+    timestamps = timestamps
 )
 
 @Serializable

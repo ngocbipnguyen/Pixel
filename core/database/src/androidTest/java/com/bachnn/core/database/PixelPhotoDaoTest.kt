@@ -55,7 +55,8 @@ class PixelPhotoDaoTest {
             photographerId = 831475,
             photographerUrl = "https://www.pexels.com/@rynocerontem",
             avgColor = "#674E38",
-            src = srcPhoto
+            src = srcPhoto,
+            timestamps = 1759307221
         )
 
         photoDao.insertPixelPhoto(photo)
@@ -90,7 +91,8 @@ class PixelPhotoDaoTest {
             photographerId = 831475,
             photographerUrl = "https://www.pexels.com/@rynocerontem",
             avgColor = "#674E38",
-            src = srcPhoto
+            src = srcPhoto,
+            timestamps = 1759307221
         )
 
         val photos = listOf<PixelsPhotoEntity>(photo)

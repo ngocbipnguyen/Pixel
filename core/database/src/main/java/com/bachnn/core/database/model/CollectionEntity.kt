@@ -12,7 +12,8 @@ data class CollectionEntity(
     val isPrivate: Boolean,
     val mediaCount: Int,
     val photosCount: Int,
-    val videosCount: Int
+    val videosCount: Int,
+    val timestamps: Long
 )
 
 fun CollectionEntity.asExternalModel(): Collection {
@@ -25,6 +26,7 @@ fun CollectionEntity.asExternalModel(): Collection {
         mediaCount = mediaCount,
         photosCount = photosCount,
         videosCount = videosCount,
+        timestamps = timestamps,
         medias = listOf()
     )
 

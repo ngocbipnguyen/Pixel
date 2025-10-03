@@ -5,7 +5,7 @@ import com.bachnn.data.Synchronizer
 import com.bachnn.data.model.Collection
 import kotlinx.coroutines.flow.Flow
 
-interface CollectionRepository : Syncable {
+interface CollectionRepository {
 
     suspend fun getCollections(): List<Collection>
 

@@ -41,4 +41,8 @@ interface CollectionDao {
         """,
     )
     suspend fun deleteTopics(ids: List<String>)
+
+    @Query("SELECT MAX(timestamps) FROM collections")
+    suspend fun getLatestTimestamp(): Long?
+
 }
