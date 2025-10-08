@@ -7,6 +7,8 @@ interface PixelPhotoRepository {
 
     suspend fun getPhotos(): List<PixelsPhoto>
 
+    suspend fun getPhotosByIdCollection(idCollection: String): List<PixelsPhoto>?
+
     suspend fun getPhoto(id: Int): PixelsPhoto
 
 }

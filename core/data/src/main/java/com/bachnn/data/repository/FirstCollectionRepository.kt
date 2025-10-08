@@ -2,6 +2,7 @@ package com.bachnn.data.repository
 
 import com.bachnn.core.database.local.dao.CollectionDao
 import com.bachnn.core.database.model.CollectionEntity
+import com.bachnn.core.database.model.CollectionWithPhotos
 import com.bachnn.core.database.model.asExternalModel
 import com.bachnn.core.network.model.asExternalModel
 import com.bachnn.core.network.retrofit.NetworkRetrofit
@@ -34,5 +35,9 @@ class FirstCollectionRepository @Inject constructor(
 
     override suspend fun getCollection(id: String): Collection {
         return collectionDao.getCollectionById(id).asExternalModel()
+    }
+
+    override suspend fun getCollections(id: String): CollectionWithPhotos? {
+        return collectionDao.getCollectionWithPhotos(id)
     }
 }

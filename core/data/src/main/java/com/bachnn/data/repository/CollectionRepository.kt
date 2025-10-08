@@ -1,5 +1,6 @@
 package com.bachnn.data.repository
 
+import com.bachnn.core.database.model.CollectionWithPhotos
 import com.bachnn.data.Syncable
 import com.bachnn.data.Synchronizer
 import com.bachnn.data.model.Collection
@@ -10,5 +11,7 @@ interface CollectionRepository {
     suspend fun getCollections(): List<Collection>
 
     suspend fun getCollection(id: String): Collection
+
+    suspend fun getCollections(id: String): CollectionWithPhotos?
 
 }

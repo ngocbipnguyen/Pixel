@@ -1,5 +1,6 @@
 package com.bachnn.data.repository
 
+import com.bachnn.core.database.local.dao.CollectionDao
 import com.bachnn.core.database.local.dao.PhotoDao
 import com.bachnn.core.database.model.asExternalModel
 import com.bachnn.core.network.model.asExternalModel
@@ -12,6 +13,7 @@ import javax.inject.Inject
 
 class FirstPixelRepository @Inject constructor(
     private val pixelDao: PhotoDao,
+    private val collectionDao: CollectionDao,
     private val networkRetrofit: NetworkRetrofit
 ): PixelPhotoRepository {
     override suspend fun getPhotos(): List<PixelsPhoto> {
@@ -19,6 +21,11 @@ class FirstPixelRepository @Inject constructor(
         getPhotosByTimestamps(localTimestamp!!)
         return pixelDao.getPixelPhotos().map { it -> it.asExternalModel() }
     }
+
+    override suspend fun getPhotosByIdCollection(idCollection: String): List<PixelsPhoto>? {
+        return collectionDao.getCollectionWithPhotos(idCollection)?.photos?.map { it -> it.asExternalModel() }
+    }
+
 
     suspend fun getPhotosByTimestamps(timestamp: Long) {
         val photos = networkRetrofit.getMedias()
