@@ -1,4 +1,4 @@
-package com.bachnn.core.model
+package com.bachnn.feature.collection
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
