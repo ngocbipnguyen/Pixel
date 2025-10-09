@@ -27,7 +27,7 @@ import com.bachnn.data.model.Collection
 import androidx.hilt.navigation.compose.hiltViewModel
 
 @Composable
-fun Collection(
+fun CollectionScreen(
     onClickCollection: (Collection) -> Unit,
     viewModel: CollectionViewModel = hiltViewModel()
 ) {
