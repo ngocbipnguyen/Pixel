@@ -2,13 +2,10 @@ package com.bachnn.data.repository
 
 import com.bachnn.core.database.local.dao.CollectionDao
 import com.bachnn.core.database.local.dao.PhotoDao
-import com.bachnn.core.database.model.asExternalModel
-import com.bachnn.core.network.model.asExternalModel
 import com.bachnn.core.network.retrofit.NetworkRetrofit
-import com.bachnn.data.Synchronizer
-import com.bachnn.data.changeListSync
-import com.bachnn.data.model.ChangeListVersions
 import com.bachnn.data.model.PixelsPhoto
+import com.bachnn.data.model.asExternalEntityToDataModel
+import com.bachnn.data.model.asExternalNetworkToEntityModel
 import javax.inject.Inject
 
 class FirstPixelRepository @Inject constructor(
@@ -19,11 +16,11 @@ class FirstPixelRepository @Inject constructor(
     override suspend fun getPhotos(): List<PixelsPhoto> {
         val localTimestamp = pixelDao.getLatestTimestamp()
         getPhotosByTimestamps(localTimestamp!!)
-        return pixelDao.getPixelPhotos().map { it -> it.asExternalModel() }
+        return pixelDao.getPixelPhotos().map { it -> it.asExternalEntityToDataModel() }
     }
 
     override suspend fun getPhotosByIdCollection(idCollection: String): List<PixelsPhoto>? {
-        return collectionDao.getCollectionWithPhotos(idCollection)?.photos?.map { it -> it.asExternalModel() }
+        return collectionDao.getCollectionWithPhotos(idCollection)?.photos?.map { it -> it.asExternalEntityToDataModel() }
     }
 
 
@@ -32,12 +29,12 @@ class FirstPixelRepository @Inject constructor(
         val networkTimestamp = photos.maxByOrNull { it.timestamps }
         if (networkTimestamp?.timestamps!! > timestamp) {
             val updatePhotos = photos.filter { it.timestamps > timestamp }
-            pixelDao.insertPixelPhotos(updatePhotos.map { it -> it.asExternalModel() })
+            pixelDao.insertPixelPhotos(updatePhotos.map { it -> it.asExternalNetworkToEntityModel() })
         }
     }
 
     override suspend fun getPhoto(id: Int): PixelsPhoto {
-        return pixelDao.getPixelPhotoById(id).asExternalModel()
+        return pixelDao.getPixelPhotoById(id).asExternalEntityToDataModel()
     }
 
 }

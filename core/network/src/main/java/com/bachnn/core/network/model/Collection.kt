@@ -1,6 +1,5 @@
 package com.bachnn.core.network.model
 
-import com.bachnn.core.database.model.CollectionEntity
 import com.google.gson.annotations.SerializedName
 import kotlinx.serialization.Serializable
 
@@ -18,20 +17,21 @@ data class Collection(
     @SerializedName("videos_count")
     val videosCount: Int,
     val medias: List<PhotoSrc>,
+    @SerializedName("timestamp")
     val timestamps: Long
 )
 
-fun Collection.asExternalModel(): CollectionEntity {
-
-    return CollectionEntity(
-        id = id,
-        title = title,
-        description = description,
-        isPrivate = isPrivate,
-        mediaCount = mediaCount,
-        photosCount = photosCount,
-        videosCount = videosCount,
-        timestamps = timestamps
-    )
-
-}
+//fun Collection.asExternalModel(): CollectionEntity {
+//
+//    return CollectionEntity(
+//        id = id,
+//        title = title,
+//        description = description,
+//        isPrivate = isPrivate,
+//        mediaCount = mediaCount,
+//        photosCount = photosCount,
+//        videosCount = videosCount,
+//        timestamps = timestamps
+//    )
+//
+//}

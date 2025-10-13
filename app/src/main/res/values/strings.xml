@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Pixel</string>
+    <string name="splash_description">Splash image\n</string>
 </resources>

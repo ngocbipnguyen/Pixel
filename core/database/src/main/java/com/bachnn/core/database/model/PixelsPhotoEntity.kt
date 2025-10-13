@@ -3,8 +3,6 @@ package com.bachnn.core.database.model
 import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.bachnn.data.model.Collection
-import com.bachnn.data.model.PixelsPhoto
 
 @Entity(tableName = "pixels_photos")
 data class PixelsPhotoEntity(
@@ -22,19 +20,19 @@ data class PixelsPhotoEntity(
     @Embedded val src: PhotoSrcEntity  // nhúng PhotoSrc
 )
 
-fun PixelsPhotoEntity.asExternalModel(): PixelsPhoto {
-    return PixelsPhoto(
-        id = id,
-        idCollection = idCollection,
-        type = type,
-        photographerId = photographerId,
-        photographer = photographer,
-        photographerUrl = photographerUrl,
-        url = url,
-        width = width,
-        height = height,
-        avgColor = avgColor,
-        src = src.asExternalModel(),
-        timestamps = timestamps
-    )
-}
+//fun PixelsPhotoEntity.asExternalModel(): PixelsPhoto {
+//    return PixelsPhoto(
+//        id = id,
+//        idCollection = idCollection,
+//        type = type,
+//        photographerId = photographerId,
+//        photographer = photographer,
+//        photographerUrl = photographerUrl,
+//        url = url,
+//        width = width,
+//        height = height,
+//        avgColor = avgColor,
+//        src = src.asExternalModel(),
+//        timestamps = timestamps
+//    )
+//}

@@ -2,7 +2,6 @@ package com.bachnn.core.database.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.bachnn.data.model.Collection
 
 @Entity(tableName = "collections")
 data class CollectionEntity(
@@ -16,18 +15,18 @@ data class CollectionEntity(
     val timestamps: Long
 )
 
-fun CollectionEntity.asExternalModel(): Collection {
-
-    return Collection(
-        id = id,
-        title = title,
-        description = description,
-        isPrivate = isPrivate,
-        mediaCount = mediaCount,
-        photosCount = photosCount,
-        videosCount = videosCount,
-        timestamps = timestamps,
-        medias = listOf()
-    )
-
-}
+//fun CollectionEntity.asExternalModel(): Collection {
+//
+//    return Collection(
+//        id = id,
+//        title = title,
+//        description = description,
+//        isPrivate = isPrivate,
+//        mediaCount = mediaCount,
+//        photosCount = photosCount,
+//        videosCount = videosCount,
+//        timestamps = timestamps,
+//        medias = listOf()
+//    )
+//
+//}

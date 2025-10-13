@@ -65,7 +65,7 @@ fun ShowImage(
 
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
-fun ShowPhotoCollection(photos: List<PixelsPhoto>) {
+fun ShowPhotoCollection(photos: List<PhotoSrc>) {
     Row {
         Card(
             Modifier
@@ -75,14 +75,14 @@ fun ShowPhotoCollection(photos: List<PixelsPhoto>) {
             shape = RoundedCornerShape(topStart = 8.dp, bottomStart = 8.dp)
         ) {
             GlideImage(
-                model = photos[0].src.medium,
+                model = photos[0].medium,
                 contentDescription = "",
                 contentScale = ContentScale.Crop,
             )
         }
 
         GlideImage(
-            model = photos[1].src.medium,
+            model = photos[1].medium,
             contentDescription = "",
             Modifier
                 .weight(1f)
@@ -99,7 +99,7 @@ fun ShowPhotoCollection(photos: List<PixelsPhoto>) {
             shape = RoundedCornerShape(topEnd = 8.dp, bottomEnd = 8.dp)
         ) {
             GlideImage(
-                model = photos[2].src.medium,
+                model = photos[2].medium,
                 contentDescription = "",
                 contentScale = ContentScale.Crop,
             )

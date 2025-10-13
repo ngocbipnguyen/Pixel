@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -72,9 +73,10 @@ fun CollectionPagerScreen(
 ) {
     LazyVerticalStaggeredGrid(
         columns = StaggeredGridCells.Fixed(1),
+        modifier = modifier.fillMaxSize(),
         verticalItemSpacing = 0.dp,
         content = {
-            items(collections, key = { it }) { it ->
+            items(collections, key = { it.id }) { it ->
                 CollectionItem(it, Modifier, onClickCollection)
             }
         }
@@ -94,11 +96,12 @@ fun CollectionItem(
                 onClickCollection(collection)
             },
     ) {
-        Row(
+        Column(
             modifier = Modifier.padding(start = 12.dp, end = 12.dp),
-            verticalAlignment = Alignment.CenterVertically
         ) {
-            ShowPhotoCollection(collection.medias)
+            if (!collection.medias.isEmpty()) {
+                ShowPhotoCollection(collection.medias)
+            }
 
             Text(
                 text = collection.title,
@@ -106,11 +109,6 @@ fun CollectionItem(
                 modifier = Modifier.padding(start = 4.dp)
             )
 
-            Text(
-                text = collection.title,
-                style = MaterialTheme.typography.titleMedium,
-                modifier = Modifier.padding(start = 4.dp)
-            )
             Text(
                 text = "${collection.mediaCount.toString()} + Video and Photos",
                 style = MaterialTheme.typography.titleMedium,
