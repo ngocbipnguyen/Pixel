@@ -4,9 +4,9 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navOptions
-import com.bachnn.feature.collection.navigation.CollectionRoute
 import com.bachnn.feature.collection.navigation.collectionBuild
+import com.bachnn.feature.viewpager.homeBuild
+import com.bachnn.feature.viewpager.navigateToHome
 
 @Composable
 fun NavApp() {
@@ -21,15 +21,36 @@ fun NavAppHost(navHostController: NavHostController) {
     ) {
 
         splashBuild(
-            onSplashClick = {
-                navHostController.navigateToCollection() {
-                    launchSingleTop = true
-                    popUpTo(SplashRoute) {
-                        inclusive = true
+            onSplashClick = { isLogin ->
+                if (isLogin) {
+                    navHostController.navigateToHome() {
+                        launchSingleTop = true
+                        popUpTo(SplashRoute) {
+                            inclusive = true
+                        }
+                    }
+                } else {
+                    navHostController.navigateToLogin() {
+                        launchSingleTop = true
+                        popUpTo(SplashRoute) {
+                            inclusive = true
+                        }
                     }
                 }
             }
         )
+
+        loginBuild(onClick = {
+            navHostController.navigateToHome() {
+                launchSingleTop = true
+                popUpTo(LoginRoute) {
+                    inclusive = true
+                }
+            }
+        })
+
+        homeBuild {  }
+
         collectionBuild(
             onCollectionClick = {
 

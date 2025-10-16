@@ -23,13 +23,14 @@ import com.bachnn.pixel.viewmodel.SplashViewModel
 
 @Composable
 fun SplashScreen(
-    onSplashClick: () -> Unit,
+    onSplashClick: (Boolean) -> Unit,
     viewmodel: SplashViewModel = hiltViewModel()
 ) {
 
     when (viewmodel.splashUiState) {
         is SplashUiState.Success -> {
-            onSplashClick()
+            val isLogin = (viewmodel.splashUiState as SplashUiState.Success).isLogin
+            onSplashClick(isLogin)
         }
 
         else -> {

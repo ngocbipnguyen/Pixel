@@ -12,13 +12,13 @@ import kotlinx.serialization.Serializable
 data object SplashRoute
 
 fun NavController.navigateToCollection(navOptions: NavOptionsBuilder.() -> Unit = {}) {
-    navigate(route = CollectionRoute) {
+    navigate(route = SplashRoute) {
         navOptions()
     }
 }
 
 fun NavGraphBuilder.splashBuild(
-    onSplashClick:() -> Unit,
+    onSplashClick:(Boolean) -> Unit,
 ) {
     composable<SplashRoute> {
         SplashScreen(onSplashClick)
