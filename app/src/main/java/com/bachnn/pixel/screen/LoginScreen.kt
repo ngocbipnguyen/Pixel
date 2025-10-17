@@ -1,16 +1,18 @@
 package com.bachnn.pixel.screen
 
 import android.app.Activity
+import android.content.Context
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -19,17 +21,28 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.bachnn.pixel.R
 import com.bachnn.pixel.viewmodel.LoginViewModel
+import com.facebook.CallbackManager
+import com.facebook.FacebookCallback
+import com.facebook.FacebookException
+import com.facebook.login.LoginResult
+import com.facebook.login.widget.LoginButton
+import com.google.firebase.Firebase
+import com.google.firebase.auth.FacebookAuthProvider
+import com.google.firebase.auth.auth
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -67,15 +80,18 @@ fun LoginPage(modifier: Modifier, viewModel: LoginViewModel) {
                 .align(alignment = Alignment.Center)
         )
 
-        Row(
+        Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(start = 24.dp, bottom = 24.dp, end = 24.dp)
+                .padding(start = 50.dp, bottom = 30.dp, end = 50.dp)
                 .align(alignment = Alignment.BottomCenter),
-            horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Button(onClick = {
+            Button(
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(12.dp),
+                onClick = {
                 viewModel.loginByGoogle(activity)
             }) {
                 Image(
@@ -90,9 +106,69 @@ fun LoginPage(modifier: Modifier, viewModel: LoginViewModel) {
                     style = MaterialTheme.typography.titleLarge
                 )
             }
+
+            Spacer(Modifier.height(12.dp))
+
+            SigninFacebookButton(
+                context,
+                onSignedIn = {
+
+                },
+                onSignInFailed = {
+
+                }
+            )
         }
     }
 
+}
+
+@Composable
+fun SigninFacebookButton(
+    context: Context,
+    onSignInFailed: (Exception) -> Unit,
+    onSignedIn: () -> Unit,
+) {
+    val scope = rememberCoroutineScope()
+    AndroidView(
+        { context ->
+            LoginButton(context).apply {
+                text = context.getString(R.string.login_by_facebook)
+                textSize = 20.0f
+                val callbackManager = CallbackManager.Factory.create()
+                setPermissions("email", "public_profile")
+                registerCallback(callbackManager, object : FacebookCallback<LoginResult> {
+                    override fun onCancel() {
+                        // do nothing
+                    }
+
+                    override fun onError(error: FacebookException) {
+                        onSignInFailed(error)
+                    }
+
+                    override fun onSuccess(result: LoginResult) {
+                        scope.launch {
+                            val token = result.accessToken.token
+                            val credential = FacebookAuthProvider.getCredential(token)
+                            val authResult = Firebase.auth.signInWithCredential(credential).await()
+                            if (authResult.user != null) {
+                                onSignedIn(
+//                                User(
+//                                    email = authResult.user!!.email ?: "",
+//                                    displayName = authResult.user!!.displayName ?: "",
+//                                    photoUrl = (authResult.user!!.photoUrl ?: "").toString()
+//                                )
+                                )
+                            } else {
+                                onSignInFailed(RuntimeException("Could not sign in with Firebase"))
+                            }
+                        }
+                    }
+                })
+            }
+        },
+        modifier = Modifier.fillMaxWidth()
+    )
 }
 
 
@@ -101,6 +177,6 @@ fun LoginPage(modifier: Modifier, viewModel: LoginViewModel) {
 @Composable
 fun LoginScreenPreview() {
     LoginScreen(onClick = {
-        
+
     })
 }

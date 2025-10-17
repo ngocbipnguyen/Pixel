@@ -85,4 +85,7 @@ dependencies {
     implementation(libs.converter.gson)
     implementation(libs.logging.interceptor)
 
+    //facebook-login
+    implementation(libs.facebook.android.sdk)
+
 }

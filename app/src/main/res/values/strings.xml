@@ -4,4 +4,13 @@
     <string name="login_title">Login</string>
     <string name="login_by_google">Login by Google</string>
     <string name="default_web_client_id">39746284239-887218nu26gqtj8pd0oh9ol05q9nub8g.apps.googleusercontent.com</string>
+    <string name="url_facebook">https://chatapp-e3c21.firebaseapp.com/__/auth/handler</string>
+
+    <!--0d765100972ba9c1706353f599109770-->
+    <string name="facebook_app_id">838090802487395</string>
+    <string name="fb_login_protocol_scheme">fb838090802487395</string>
+    <string name="facebook_client_token">e1940eefef9a149ec642a9558f27710f</string>
+    <string name="login_by_facebook">Login by Facebook</string>
+
+
 </resources>
