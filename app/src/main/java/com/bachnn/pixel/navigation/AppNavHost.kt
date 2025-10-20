@@ -21,9 +21,9 @@ fun NavAppHost(navHostController: NavHostController) {
     ) {
 
         splashBuild(
-            onSplashClick = { isLogin ->
+            onSplashClick = { isLogin, user ->
                 if (isLogin) {
-                    navHostController.navigateToHome() {
+                    navHostController.navigateToHome(user) {
                         launchSingleTop = true
                         popUpTo(SplashRoute) {
                             inclusive = true
@@ -40,8 +40,8 @@ fun NavAppHost(navHostController: NavHostController) {
             }
         )
 
-        loginBuild(onClick = {
-            navHostController.navigateToHome() {
+        loginBuild(onClick = { user ->
+            navHostController.navigateToHome(user) {
                 launchSingleTop = true
                 popUpTo(LoginRoute) {
                     inclusive = true

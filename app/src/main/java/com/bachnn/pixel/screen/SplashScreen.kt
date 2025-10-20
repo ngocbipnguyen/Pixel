@@ -16,6 +16,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.bachnn.data.model.User
 import com.bachnn.pixel.R
 import com.bachnn.pixel.viewmodel.SplashUiState
 import com.bachnn.pixel.viewmodel.SplashViewModel
@@ -23,14 +24,15 @@ import com.bachnn.pixel.viewmodel.SplashViewModel
 
 @Composable
 fun SplashScreen(
-    onSplashClick: (Boolean) -> Unit,
+    onSplashClick: (Boolean, User?) -> Unit,
     viewmodel: SplashViewModel = hiltViewModel()
 ) {
 
     when (viewmodel.splashUiState) {
         is SplashUiState.Success -> {
             val isLogin = (viewmodel.splashUiState as SplashUiState.Success).isLogin
-            onSplashClick(isLogin)
+            val user = (viewmodel.splashUiState as SplashUiState.Success).user
+            onSplashClick(isLogin, user)
         }
 
         else -> {

@@ -10,6 +10,7 @@ import androidx.credentials.CredentialManager
 import androidx.credentials.GetCredentialRequest
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.bachnn.data.model.User
 import com.bachnn.pixel.R
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
@@ -20,6 +21,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 import java.security.MessageDigest
 import java.util.UUID
 import javax.inject.Inject
@@ -46,7 +48,11 @@ class LoginViewModel @Inject constructor(@ApplicationContext val context: Contex
     }
 
 
-    fun loginByGoogle(activity: Activity) {
+    fun loginByGoogle(
+        activity: Activity,
+        signInSuccess: (User) -> Unit,
+        signInFailure: (String) -> Unit
+    ) {
 
         // Generate a nonce (a random number used once)
         val ranNonce: String = UUID.randomUUID().toString()
@@ -85,9 +91,23 @@ class LoginViewModel @Inject constructor(@ApplicationContext val context: Contex
                 val authCredential =
                     GoogleAuthProvider.getCredential(googleToken, null)
 
+                val task = auth.signInWithCredential(authCredential).await()
+
+                var user: User? = null
+
+                task.user?.let { it ->
+                    val uid = it.uid
+                    val email = it.email.toString()
+                    val name = it.displayName.toString()
+                    val urlPhoto = it.photoUrl.toString()
+                    user = User(uid, name, email, urlPhoto)
+                    signInSuccess(user)
+
+                }
 
                 Log.e("okkk", "google token : $googleToken")
             } catch (e: Exception) {
+                signInFailure(e.message.toString())
                 Log.e("okkk", " e : ${e.toString()}")
             }
         }

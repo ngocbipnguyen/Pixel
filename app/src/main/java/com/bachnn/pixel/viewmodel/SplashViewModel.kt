@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.bachnn.data.model.User
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
@@ -12,7 +13,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 sealed interface SplashUiState {
-    data class Success(val isLogin: Boolean) : SplashUiState
+    data class Success(val isLogin: Boolean,val user: User?) : SplashUiState
     object Loading : SplashUiState
 }
 
@@ -28,7 +29,15 @@ class SplashViewModel @Inject constructor(): ViewModel() {
         viewModelScope.launch {
             delay(3000)
             val isLogin = auth.currentUser != null
-            splashUiState = SplashUiState.Success(isLogin)
+            var user: User? = null
+            if (auth.currentUser != null) {
+                val uid = auth.currentUser?.uid.toString()
+                val name = auth.currentUser?.displayName.toString()
+                val email = auth.currentUser?.email.toString()
+                val urlPhoto = auth.currentUser?.photoUrl.toString()
+                user = User(uid, name, email, urlPhoto)
+            }
+            splashUiState = SplashUiState.Success(isLogin, user)
         }
     }
 

@@ -4,6 +4,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptionsBuilder
 import androidx.navigation.compose.composable
+import com.bachnn.data.model.User
 import com.bachnn.pixel.screen.LoginScreen
 import kotlinx.serialization.Serializable
 
@@ -17,7 +18,7 @@ fun NavController.navigateToLogin(navOptions: NavOptionsBuilder.() -> Unit = {})
 }
 
 
-fun NavGraphBuilder.loginBuild(onClick:() -> Unit) {
+fun NavGraphBuilder.loginBuild(onClick:(User) -> Unit) {
     composable<LoginRoute>{
         LoginScreen(onClick)
     }

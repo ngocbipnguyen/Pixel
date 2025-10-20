@@ -31,6 +31,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.bachnn.data.model.User
 import com.bachnn.pixel.R
 import com.bachnn.pixel.viewmodel.LoginViewModel
 import com.facebook.CallbackManager
@@ -47,7 +48,10 @@ import kotlinx.coroutines.tasks.await
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LoginScreen(onClick: () -> Unit, viewModel: LoginViewModel = hiltViewModel()) {
+fun LoginScreen(
+    signInSuccess: (User) -> Unit,
+    viewModel: LoginViewModel = hiltViewModel()
+) {
     Scaffold(topBar = {
         CenterAlignedTopAppBar(
             title = {
@@ -58,12 +62,24 @@ fun LoginScreen(onClick: () -> Unit, viewModel: LoginViewModel = hiltViewModel()
             }
         )
     }) { paddingValues ->
-        LoginPage(modifier = Modifier.padding(top = paddingValues.calculateTopPadding()), viewModel)
+        LoginPage(
+            modifier = Modifier.padding(top = paddingValues.calculateTopPadding()),
+            viewModel,
+            signInSuccess,
+            signInFailure = { log ->
+
+            }
+        )
     }
 }
 
 @Composable
-fun LoginPage(modifier: Modifier, viewModel: LoginViewModel) {
+fun LoginPage(
+    modifier: Modifier,
+    viewModel: LoginViewModel,
+    signInSuccess: (User) -> Unit,
+    signInFailure: (String) -> Unit
+) {
 
     val context = LocalContext.current
     val activity = context as? Activity ?: return
@@ -92,8 +108,8 @@ fun LoginPage(modifier: Modifier, viewModel: LoginViewModel) {
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(12.dp),
                 onClick = {
-                viewModel.loginByGoogle(activity)
-            }) {
+                    viewModel.loginByGoogle(activity, signInSuccess, signInFailure)
+                }) {
                 Image(
                     painter = painterResource(id = R.drawable.iconsgoogle),
                     contentDescription = ""
@@ -110,13 +126,10 @@ fun LoginPage(modifier: Modifier, viewModel: LoginViewModel) {
             Spacer(Modifier.height(12.dp))
 
             SigninFacebookButton(
-                context,
-                onSignedIn = {
-
-                },
                 onSignInFailed = {
 
-                }
+                },
+                signInSuccess
             )
         }
     }
@@ -125,9 +138,8 @@ fun LoginPage(modifier: Modifier, viewModel: LoginViewModel) {
 
 @Composable
 fun SigninFacebookButton(
-    context: Context,
     onSignInFailed: (Exception) -> Unit,
-    onSignedIn: () -> Unit,
+    signInSuccess: (User) -> Unit,
 ) {
     val scope = rememberCoroutineScope()
     AndroidView(
@@ -152,12 +164,13 @@ fun SigninFacebookButton(
                             val credential = FacebookAuthProvider.getCredential(token)
                             val authResult = Firebase.auth.signInWithCredential(credential).await()
                             if (authResult.user != null) {
-                                onSignedIn(
-//                                User(
-//                                    email = authResult.user!!.email ?: "",
-//                                    displayName = authResult.user!!.displayName ?: "",
-//                                    photoUrl = (authResult.user!!.photoUrl ?: "").toString()
-//                                )
+                                signInSuccess(
+                                    User(
+                                        uid = authResult.user!!.uid ?: "",
+                                        email = authResult.user!!.email ?: "",
+                                        name = authResult.user!!.displayName ?: "",
+                                        photoUrl = (authResult.user!!.photoUrl ?: "").toString()
+                                    )
                                 )
                             } else {
                                 onSignInFailed(RuntimeException("Could not sign in with Firebase"))
@@ -176,7 +189,7 @@ fun SigninFacebookButton(
 @Preview(showBackground = true)
 @Composable
 fun LoginScreenPreview() {
-    LoginScreen(onClick = {
+    LoginScreen(signInSuccess = {
 
     })
 }
