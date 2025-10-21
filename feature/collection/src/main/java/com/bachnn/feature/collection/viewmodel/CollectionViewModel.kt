@@ -1,4 +1,4 @@
-package com.bachnn.feature.collection
+package com.bachnn.feature.collection.viewmodel
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf

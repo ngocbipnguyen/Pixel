@@ -1,6 +1,5 @@
 package com.bachnn.feature.viewpager.view
 
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.pager.HorizontalPager
@@ -16,7 +15,8 @@ import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.bachnn.feature.collection.CollectionScreen
+import com.bachnn.feature.collection.screen.CollectionScreen
+import com.bachnn.feature.collection.screen.PhotoScreen
 import com.bachnn.feature.viewpager.screen.AddScreen
 import com.bachnn.feature.viewpager.screen.FollowScreen
 import com.bachnn.feature.viewpager.screen.HomeScreen
@@ -41,7 +41,7 @@ fun MainViewPager(onClick: () -> Unit) {
         HorizontalPager(state = pagerState) { page ->
             when (page) {
                 0 -> {
-                    HomeScreen(onClick)
+                    PhotoScreen(onclick = onClick)
                 }
 
                 1 -> {

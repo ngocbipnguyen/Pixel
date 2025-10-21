@@ -1,6 +1,9 @@
 package com.bachnn.feature.collection
 
+import android.content.res.Resources
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -11,7 +14,9 @@ import androidx.compose.material3.Card
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.bachnn.data.model.PhotoSrc
@@ -27,41 +32,57 @@ import com.bumptech.glide.signature.ObjectKey
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 fun ShowImage(
-    photo: PhotoSrc
+    photo: PixelsPhoto
 ) {
-    val signature = ObjectKey(photo.original)
+    val signature = ObjectKey(photo.src.original)
     val context = LocalContext.current
 
     val requestManager = remember { Glide.with(context) }
 
-    GlideImage(
-        model = photo.original,
-        contentDescription = "",
-        Modifier
-            .size(42.dp)
-            .fillMaxWidth()
-            .clickable {
+    val configuration = LocalConfiguration.current
+    val screenWidthDp = configuration.screenWidthDp.dp
+    val widthRateDp: Float =
+        pxToDp(photo.width).toFloat() / configuration.screenWidthDp.toFloat()
+    val height = photo.height / widthRateDp
 
-            },
-        contentScale = ContentScale.Fit
+    val colorCode = Color(android.graphics.Color.parseColor(photo.avgColor))
+
+    Box(
+        modifier = Modifier.background(colorCode)
     ) {
-        it.thumbnail(
-            requestManager
-                .asDrawable()
-                .load(photo.small)
+        GlideImage(
+            model = photo.src.original,
+            contentDescription = "",
+            Modifier
+                .size(screenWidthDp, pxToDp(height.toInt()).dp)
+                .fillMaxWidth()
+                .clickable {
+
+                },
+            contentScale = ContentScale.Fit
+        ) {
+            it.thumbnail(
+                requestManager
+                    .asDrawable()
+                    .load(photo.src.small)
+                    .signature(signature)
+                    .dontAnimate()
+                    .skipMemoryCache(false)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+            )
                 .signature(signature)
                 .dontAnimate()
                 .skipMemoryCache(false)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
-        )
-            .signature(signature)
-            .dontAnimate()
-            .skipMemoryCache(false)
-            .diskCacheStrategy(DiskCacheStrategy.ALL)
-            .onlyRetrieveFromCache(false)
+                .onlyRetrieveFromCache(false)
+        }
     }
 }
 
+fun pxToDp(px: Int): Int {
+    val dp = px / Resources.getSystem().displayMetrics.density
+    return dp.toInt()
+}
 
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable

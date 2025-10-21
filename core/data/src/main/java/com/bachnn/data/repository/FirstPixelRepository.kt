@@ -14,8 +14,11 @@ class FirstPixelRepository @Inject constructor(
     private val networkRetrofit: NetworkRetrofit
 ): PixelPhotoRepository {
     override suspend fun getPhotos(): List<PixelsPhoto> {
-        val localTimestamp = pixelDao.getLatestTimestamp()
-        getPhotosByTimestamps(localTimestamp!!)
+        var localTimestamp: Long? = pixelDao.getLatestTimestamp()
+        if (localTimestamp == null) {
+            localTimestamp = 0
+        }
+        getPhotosByTimestamps(localTimestamp)
         return pixelDao.getPixelPhotos().map { it -> it.asExternalEntityToDataModel() }
     }
 

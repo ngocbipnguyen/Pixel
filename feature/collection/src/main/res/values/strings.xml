@@ -2,4 +2,7 @@
 <resources>
     <string name="collection">Collection</string>
     <string name="login_title">Login</string>
+    <string name="pixel">Pixel</string>
+    <string name="follow">Follow</string>
+    <string name="download">Download</string>
 </resources>

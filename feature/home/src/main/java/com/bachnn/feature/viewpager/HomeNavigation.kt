@@ -33,6 +33,6 @@ fun NavGraphBuilder.homeBuild(
         val user = route.user?.let {
             Json.decodeFromString<User>(URLDecoder.decode(it, "UTF-8"))
         }
-        HomeScreen(onClick)
+        HomeScreen(user = user,onClick = onClick)
     }
 }

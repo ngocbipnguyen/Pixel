@@ -1,10 +1,8 @@
-package com.bachnn.feature.collection
+package com.bachnn.feature.collection.screen
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -26,6 +24,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.bachnn.data.model.Collection
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.bachnn.feature.collection.viewmodel.CollectionUiState
+import com.bachnn.feature.collection.viewmodel.CollectionViewModel
+import com.bachnn.feature.collection.R
+import com.bachnn.feature.collection.ShowPhotoCollection
 
 @Composable
 fun CollectionScreen(

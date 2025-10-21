@@ -1,10 +1,14 @@
 package com.bachnn.feature.viewpager.screen
 
+import android.app.Activity
+import android.os.Build
+import android.view.WindowInsets
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.Icon
@@ -14,12 +18,20 @@ import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import com.bachnn.data.model.User
-import com.bachnn.feature.collection.CollectionScreen
+import com.bachnn.feature.collection.screen.CollectionScreen
+import com.bachnn.feature.collection.screen.PhotoScreen
 import com.bachnn.feature.viewpager.R
 import kotlinx.coroutines.launch
 
@@ -41,8 +53,32 @@ enum class PixelPage(
 }
 
 @Composable
-fun HomeScreen(user: User, onClick: () -> Unit) {
+fun HomeScreen(user: User?, onClick: () -> Unit) {
     val pages = PixelPage.values()
+
+    val context = LocalContext.current
+    val activity = context as? Activity
+    if (activity != null) {
+        val window = activity.window
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+
+        SideEffect {
+            WindowCompat.setDecorFitsSystemWindows(window, false)
+            WindowInsetsControllerCompat(window, window.decorView).apply {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                    window.insetsController?.show(WindowInsets.Type.statusBars())
+                } else {
+                    WindowInsetsControllerCompat(window, window.decorView).show(WindowInsetsCompat.Type.statusBars())
+                }
+                systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+            }
+
+        }
+
+        window.statusBarColor = MaterialTheme.colorScheme.primary.toArgb()
+
+    }
+
     Scaffold { contentPadding ->
         HomePage(
             modifier = Modifier.padding(top = contentPadding.calculateTopPadding()),
@@ -54,9 +90,9 @@ fun HomeScreen(user: User, onClick: () -> Unit) {
 }
 
 @Composable
-fun HomePage(modifier: Modifier, user: User, pages: Array<PixelPage>, onClick: () -> Unit) {
+fun HomePage(modifier: Modifier, user: User?, pages: Array<PixelPage>, onClick: () -> Unit) {
     val pagerState = rememberPagerState(pageCount = {
-        5
+        pages.size
     })
     val coroutineScope = rememberCoroutineScope()
     Column(modifier = Modifier.fillMaxSize()) {
@@ -68,7 +104,9 @@ fun HomePage(modifier: Modifier, user: User, pages: Array<PixelPage>, onClick: (
         ) { page ->
             when (pages[page]) {
                 PixelPage.PHOTO_PAGE -> {
+                    PhotoScreen(onclick = {
 
+                    })
                 }
 
                 PixelPage.CHALLENGE_PAGE -> {
@@ -102,11 +140,11 @@ fun HomePage(modifier: Modifier, user: User, pages: Array<PixelPage>, onClick: (
                 Tab(
                     selected = pagerState.currentPage == index,
                     onClick = { coroutineScope.launch { pagerState.animateScrollToPage(index) } },
-                    text = { Text(text = title) },
                     icon = {
                         Icon(
                             painter = painterResource(id = page.drawableResId),
-                            contentDescription = title
+                            contentDescription = title,
+                            modifier = Modifier.size(50.dp).padding(vertical = 8.dp, horizontal = 8.dp)
                         )
                     },
                     unselectedContentColor = MaterialTheme.colorScheme.secondary
