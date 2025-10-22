@@ -5,4 +5,8 @@
     <string name="title_add">Add</string>
     <string name="title_search">Search</string>
     <string name="title_setting">Settings</string>
+    <string name="discription_challenge">Discription challenge</string>
+    <string name="join">Join Challenge</string>
+    <string name="leader_broad">LeaderBroad</string>
+    <string name="meet_up">Upcoming Meetups</string>
 </resources>

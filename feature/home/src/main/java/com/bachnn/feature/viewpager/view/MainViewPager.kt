@@ -45,7 +45,7 @@ fun MainViewPager(onClick: () -> Unit) {
                 }
 
                 1 -> {
-                    FollowScreen(onClick)
+                    FollowScreen(onClick = onClick)
                 }
 
                 2 -> {
