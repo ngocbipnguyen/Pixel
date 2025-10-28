@@ -1,22 +1,32 @@
 package com.bachnn.feature.viewpager.screen
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.staggeredgrid.LazyHorizontalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.foundation.lazy.staggeredgrid.rememberLazyStaggeredGridState
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
@@ -29,16 +39,23 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.bachnn.data.model.Collection
+import com.bachnn.data.model.MeetUp
 import com.bachnn.data.model.PhotoSrc
+import com.bachnn.data.model.Photographer
+import com.bachnn.feature.collection.screen.PagerError
+import com.bachnn.feature.collection.screen.PagerLoading
 import com.bachnn.feature.collection.view.CircleNetworkImage
+import com.bachnn.feature.collection.viewmodel.PixelUiState
 import com.bachnn.feature.viewpager.R
 import com.bachnn.feature.viewpager.viewmodel.FollowUiState
 import com.bachnn.feature.viewpager.viewmodel.FollowViewModel
@@ -48,17 +65,10 @@ import com.bumptech.glide.integration.compose.GlideImage
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FollowScreen(
-    viewModel: FollowViewModel = hiltViewModel(),
-    onClick: () -> Unit
+    viewModel: FollowViewModel = hiltViewModel(), onClick: () -> Unit
 ) {
-    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
 
-    Scaffold(topBar = {
-        TopAppBar(
-            title = { Text(stringResource(R.string.title_challenge)) },
-            scrollBehavior = scrollBehavior
-        )
-    }) { contentPadding ->
+    Scaffold { contentPadding ->
         when (viewModel.followUiState) {
             is FollowUiState.Success -> {
                 FollowPage(
@@ -66,16 +76,16 @@ fun FollowScreen(
                         .fillMaxSize()
                         .padding(top = contentPadding.calculateTopPadding()),
                     viewModel = viewModel,
-                    scrollBehavior = scrollBehavior
                 )
             }
 
             is FollowUiState.Loading -> {
-
+                PagerLoading()
             }
 
             is FollowUiState.Error -> {
-
+                val message = (viewModel.followUiState as FollowUiState.Error).error
+                PagerError(message)
             }
         }
     }
@@ -86,9 +96,26 @@ fun FollowScreen(
 @Composable
 fun FollowPage(
     modifier: Modifier, viewModel: FollowViewModel,
-    scrollBehavior: TopAppBarScrollBehavior
 ) {
-
+    val uiState = viewModel.followUiState as FollowUiState.Success
+    val configuration = LocalConfiguration.current
+    val screenWidthDp = configuration.screenWidthDp.dp
+    val scrollState = rememberScrollState()
+    Column(modifier = modifier.verticalScroll(scrollState)) {
+        ChallengeGroup(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 12.dp), uiState.collections
+        )
+        LeaderBroadGroup(
+            modifier = Modifier.width(screenWidthDp), uiState.photographers
+        )
+        MeetupsGroup(
+            modifier = Modifier
+                .width(screenWidthDp),
+            uiState.meetup
+        )
+    }
 }
 
 
@@ -100,8 +127,7 @@ fun FollowPage(
 
 @Composable
 fun ChallengeGroup(
-    modifier: Modifier,
-    collections: List<Collection>
+    modifier: Modifier, collections: List<Collection>
 ) {
 
     val listState = rememberLazyStaggeredGridState()
@@ -110,25 +136,31 @@ fun ChallengeGroup(
     val screenWidthDp = configuration.screenWidthDp.dp
 
     Column(modifier = modifier) {
-        Text(stringResource(R.string.title_challenge), style = MaterialTheme.typography.titleLarge)
+        Text(
+            stringResource(R.string.title_challenge),
+            style = MaterialTheme.typography.headlineMedium,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.padding(start = 8.dp)
+        )
         Text(
             stringResource(R.string.discription_challenge),
-            style = MaterialTheme.typography.bodyLarge
+            style = MaterialTheme.typography.titleSmall,
+            modifier = Modifier.padding(start = 8.dp, end = 8.dp)
         )
         LazyHorizontalStaggeredGrid(
             rows = StaggeredGridCells.Fixed(1),
-            horizontalItemSpacing = 4.dp,
             state = listState,
             modifier = modifier
-                .fillMaxSize()
+                .fillMaxWidth()
+                .height(490.dp)
+                .padding(top = 24.dp, bottom = 24.dp)
         ) {
             items(collections, key = { it.id }) { it ->
-                ItemChallenge(
-                    modifier = Modifier
-                        .width(screenWidthDp)
-                        .height(screenWidthDp),
-                    item = it
-                )
+                if (it.medias.isNotEmpty()) {
+                    ItemChallenge(
+                        modifier = Modifier.fillMaxWidth(), item = it
+                    )
+                }
             }
         }
     }
@@ -136,43 +168,61 @@ fun ChallengeGroup(
 
 @Composable
 fun ItemChallenge(modifier: Modifier, item: Collection) {
-    Column {
-        GroupPhoto(modifier = modifier, items = item.medias)
-        Text(item.title, style = MaterialTheme.typography.titleSmall)
+    val configuration = LocalConfiguration.current
+    val screenWidthDp = configuration.screenWidthDp.dp
+    Column(modifier = modifier.width(screenWidthDp)) {
+        GroupPhoto(
+            modifier = Modifier
+                .width(screenWidthDp * 0.95f)
+                .align(alignment = Alignment.CenterHorizontally)
+                .height(280.dp), items = item.medias
+        )
+        Text(
+            item.title,
+            style = MaterialTheme.typography.titleLarge,
+            modifier = Modifier.padding(8.dp),
+            fontWeight = FontWeight.Bold
+        )
         Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
+            modifier = Modifier
+                .width(screenWidthDp * 0.95f)
+                .align(alignment = Alignment.CenterHorizontally)
+                .padding(top = 12.dp, bottom = 12.dp),
         ) {
             OutlinedButton(
                 onClick = {},
                 modifier = Modifier
-                    .width(120.dp)
-                    .padding(start = 12.dp, end = 12.dp)
+                    .width(160.dp)
+                    .padding(end = 12.dp)
                     .clip(RoundedCornerShape(8.dp))
             ) {
-                Text("11 Days", style = MaterialTheme.typography.bodySmall)
+                Text("11 Days", style = MaterialTheme.typography.titleMedium)
             }
 
             OutlinedButton(
                 onClick = {},
                 modifier = Modifier
-                    .width(120.dp)
-                    .padding(start = 12.dp, end = 12.dp)
+                    .width(160.dp)
+                    .padding(end = 12.dp)
                     .clip(RoundedCornerShape(8.dp))
             ) {
-                Text("$30", style = MaterialTheme.typography.bodySmall)
+                Text("$30", style = MaterialTheme.typography.titleMedium)
             }
         }
+
 
         Button(
             onClick = {
 
             },
             modifier = Modifier
-                .fillMaxWidth()
+                .width(screenWidthDp * 0.95f)
+                .align(alignment = Alignment.CenterHorizontally)
                 .clip(RoundedCornerShape(8.dp))
         ) {
-            Text(stringResource(R.string.join), style = MaterialTheme.typography.bodyLarge)
+            Text(
+                stringResource(R.string.join), style = MaterialTheme.typography.titleLarge
+            )
         }
 
     }
@@ -182,36 +232,39 @@ fun ItemChallenge(modifier: Modifier, item: Collection) {
 @Composable
 fun GroupPhoto(modifier: Modifier, items: List<PhotoSrc>) {
     Box(modifier = modifier) {
-        Row(modifier = Modifier.padding(top = 12.dp, bottom = 12.dp)) {
+        Row(modifier = Modifier) {
             GlideImage(
                 model = items[0].medium,
                 contentDescription = "",
                 modifier = Modifier
-                    .fillMaxHeight()
+                    .weight(1f)
                     .padding(end = 4.dp)
                     .clip(RoundedCornerShape(topStart = 8.dp, bottomStart = 8.dp)),
-                contentScale = ContentScale.Fit
+                contentScale = ContentScale.FillBounds
             )
 
-            Column(modifier = Modifier.padding(bottom = 4.dp)) {
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+            ) {
                 GlideImage(
                     model = items[1].medium,
                     contentDescription = "",
                     modifier = Modifier
-                        .fillMaxHeight()
-                        .padding(end = 4.dp)
+                        .weight(1f)
+                        .padding(end = 4.dp, bottom = 4.dp)
                         .clip(RoundedCornerShape(topEnd = 8.dp)),
-                    contentScale = ContentScale.Fit
+                    contentScale = ContentScale.FillBounds
                 )
 
                 GlideImage(
                     model = items[2].medium,
                     contentDescription = "",
                     modifier = Modifier
-                        .fillMaxHeight()
+                        .weight(1f)
                         .padding(end = 4.dp)
                         .clip(RoundedCornerShape(bottomEnd = 8.dp)),
-                    contentScale = ContentScale.Fit
+                    contentScale = ContentScale.FillBounds
                 )
             }
         }
@@ -226,28 +279,29 @@ fun GroupPhoto(modifier: Modifier, items: List<PhotoSrc>) {
 * */
 
 @Composable
-fun LeaderBroadGroup(modifier: Modifier, collections: List<Collection>) {
+fun LeaderBroadGroup(modifier: Modifier, collections: List<Photographer>) {
     val leaderBroadState = rememberLazyStaggeredGridState()
     val configuration = LocalConfiguration.current
     val screenWidthDp = configuration.screenWidthDp.dp
-    Column(modifier = modifier) {
+    Column(modifier = modifier.padding(top = 12.dp)) {
         Text(
             stringResource(R.string.leader_broad),
-            style = MaterialTheme.typography.titleLarge
+            style = MaterialTheme.typography.headlineMedium,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.padding(8.dp)
+
         )
 
         LazyHorizontalStaggeredGrid(
             rows = StaggeredGridCells.Fixed(1),
-            horizontalItemSpacing = 4.dp,
             state = leaderBroadState,
             modifier = modifier
-                .fillMaxSize()
+                .fillMaxWidth()
+                .height(300.dp)
         ) {
             items(collections, key = { it.id }) { it ->
-                ItemLeaderBroad(
-                    modifier = Modifier.fillMaxWidth(),
-                    item = it,
-                    screenWidthDp
+                ItemLeaderBroadCircle(
+                    modifier = Modifier.width(screenWidthDp), item = it, screenWidthDp * 0.95f
                 )
             }
         }
@@ -256,106 +310,103 @@ fun LeaderBroadGroup(modifier: Modifier, collections: List<Collection>) {
 
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
-fun ItemLeaderBroad(modifier: Modifier, item: Collection, screenWidthDp: Dp) {
-    Box(
-        modifier = modifier
-            .padding(12.dp)
-            .clip(
-                RoundedCornerShape(
-                    12.dp
-                )
-            )
+fun ItemLeaderBroadCircle(modifier: Modifier, item: Photographer, screenWidthDp: Dp) {
+    Card(
+        modifier = modifier.clip(RoundedCornerShape(8.dp)), colors = CardDefaults.cardColors(
+            containerColor = Color.Transparent
+        )
     ) {
-        ConstraintLayout(
-            modifier = Modifier.fillMaxWidth()
+        Column(
+            modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            val (avatar, row, column) = createRefs()
             Row(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .constrainAs(row) {
-                        start.linkTo(parent.start)
-                        top.linkTo(parent.top)
-                        end.linkTo(parent.end)
-                    }
+                    .width(screenWidthDp)
+                    .height(160.dp)
+                    .align(alignment = Alignment.CenterHorizontally)
             ) {
                 GlideImage(
-                    model = item.medias[0].medium,
+                    model = item.photos[0].medium,
                     contentDescription = "",
-                    contentScale = ContentScale.Fit,
                     modifier = Modifier
-                        .fillMaxWidth()
                         .weight(1f)
+                        .fillMaxHeight() // Fill the height provided by the Row
                         .padding(end = 4.dp)
+                        .clip(
+                            RoundedCornerShape(
+                                bottomStart = 8.dp, topStart = 8.dp
+                            )
+                        ), // Add clipping for better UI
+                    contentScale = ContentScale.Crop
                 )
-
                 GlideImage(
-                    model = item.medias[1].medium,
+                    model = item.photos[1].medium,
                     contentDescription = "",
-                    contentScale = ContentScale.Fit,
                     modifier = Modifier
-                        .fillMaxWidth()
                         .weight(1f)
+                        .fillMaxHeight() // Fill the height provided by the Row
+                        .clip(
+                            RoundedCornerShape(
+                                topEnd = 8.dp, bottomEnd = 8.dp
+                            )
+                        ), // Add clipping for better UI
+                    contentScale = ContentScale.Crop,
                 )
             }
 
             CircleNetworkImage(
                 modifier = Modifier
-                    .size(56.dp)
-                    .constrainAs(avatar) {
-                        start.linkTo(parent.start)
-                        end.linkTo(parent.end)
-                        top.linkTo(row.top)
-                        bottom.linkTo(row.bottom)
-                    },
-                item.medias[2].medium
+                    .size(66.dp)
+                    .offset(y = (-33).dp)
+                    .border(3.dp, Color.White, CircleShape), item.url
             )
+            Text(
+                item.name,
+                style = MaterialTheme.typography.headlineSmall,
+                modifier = Modifier.offset(y = (-20).dp)
+            )
+            OutlinedButton(
+                onClick = {
 
-            Column(
+                },
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 28.dp, bottom = 8.dp)
-                    .constrainAs(column) {
-                        start.linkTo(parent.start)
-                        end.linkTo(parent.end)
-                        top.linkTo(row.bottom)
-                    },
-                verticalArrangement = Arrangement.Center
+                    .offset(y = (-12).dp)
+                    .align(alignment = Alignment.CenterHorizontally)
             ) {
-                Text(item.title, style = MaterialTheme.typography.bodyLarge)
-                OutlinedButton(onClick = {
-
-                }) {
-                    Text("Follow", style = MaterialTheme.typography.bodyLarge)
-                }
+                Text(
+                    "Follow",
+                    style = MaterialTheme.typography.titleLarge,
+                    fontWeight = FontWeight.Bold
+                )
             }
-
         }
     }
 }
 
 @Composable
-fun MeetupsGroup(modifier: Modifier, collections: List<Collection>) {
+fun MeetupsGroup(modifier: Modifier, collections: List<MeetUp>) {
 
     val meetupBroadState = rememberLazyStaggeredGridState()
-
+    val configuration = LocalConfiguration.current
+    val screenWidthDp = configuration.screenWidthDp.dp
     Column(modifier = modifier) {
         Text(
             stringResource(R.string.meet_up),
-            style = MaterialTheme.typography.titleLarge
+            style = MaterialTheme.typography.headlineMedium,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.padding(8.dp)
         )
 
         LazyHorizontalStaggeredGrid(
             rows = StaggeredGridCells.Fixed(1),
-            horizontalItemSpacing = 4.dp,
             state = meetupBroadState,
             modifier = modifier
                 .fillMaxSize()
+                .height(320.dp)
         ) {
             items(collections, key = { it.id }) { it ->
                 ItemMeetup(
-                    modifier = Modifier.fillMaxWidth(),
-                    item = it,
+                    modifier = Modifier.fillMaxWidth(), item = it, screenWidthDp
                 )
             }
         }
@@ -364,20 +415,43 @@ fun MeetupsGroup(modifier: Modifier, collections: List<Collection>) {
 
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
-fun ItemMeetup(modifier: Modifier, item: Collection) {
-    Column(modifier = modifier) {
+fun ItemMeetup(modifier: Modifier, item: MeetUp, screenWidthDp: Dp) {
+    Column(
+        modifier = modifier
+            .width(screenWidthDp)
+            .padding(start = 4.dp, end = 4.dp)
+    ) {
         GlideImage(
-            model = item.medias[0].medium,
+            model = item.url,
             contentDescription = "",
             modifier = Modifier
-                .padding(12.dp)
                 .clip(RoundedCornerShape(12.dp))
-                .fillMaxWidth()
+                .width(screenWidthDp * 0.95f)
                 .height(200.dp)
+                .align(alignment = Alignment.CenterHorizontally),
+            contentScale = ContentScale.Crop,
         )
-        Text("", style = MaterialTheme.typography.bodyLarge)
-        Text("", style = MaterialTheme.typography.bodyMedium)
-        Text("", style = MaterialTheme.typography.bodyMedium)
+        Spacer(modifier = Modifier.height(8.dp))
+        Text(
+            item.title,
+            style = MaterialTheme.typography.titleMedium,
+            maxLines = 1,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.padding(start = 8.dp, end = 8.dp)
+        )
+        Text(
+            item.time,
+            style = MaterialTheme.typography.titleSmall,
+            modifier = Modifier.padding(start = 8.dp, end = 8.dp)
+        )
+        Text(
+            item.description,
+            style = MaterialTheme.typography.bodyLarge,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 8.dp, end = 8.dp),
+            softWrap = true,
+        )
     }
 
 }

@@ -1,0 +1,30 @@
+[
+  {
+    "id": "1222312",
+    "url": "https://images.pexels.com/photos/33339374/pexels-photo-33339374.jpeg?auto=compress&cs=tinysrgb&h=350",
+    "title": "A Better Future For Animals",
+    "time": "Updated Sep 3, 2025",
+    "description": "In the ConstraintLayout example, constraints are specified inline, with a modifier in the composable they're applied"
+  },
+  {
+    "id": "56566565",
+    "url": "https://images.pexels.com/photos/33190319/pexels-photo-33190319.jpeg?auto=compress&cs=tinysrgb&h=350",
+    "title": "Creative Motion",
+    "time": "Updated Oct 10, 2025",
+    "description": " However, there are situations when it's preferable to decouple the constraints from the layouts they apply to. For example"
+  },
+  {
+    "id": "78787787",
+    "url": "https://images.pexels.com/photos/33379201/pexels-photo-33379201.jpeg?auto=compress&cs=tinysrgb&h=350",
+    "title": "Masterpiece",
+    "time": "Updated Oct 10, 2025",
+    "description": " you might want to change the constraints based on the screen configuration, or animate between two constraint sets"
+  },
+  {
+    "id": "989898998",
+    "url": "https://images.pexels.com/photos/33370246/pexels-photo-33370246.jpeg?auto=compress&cs=tinysrgb&h=350",
+    "title": "Emotion",
+    "time": "Decoupled API",
+    "description": "ConstraintLayout contains concepts such as guidelines, barriers, and chains that can help with positioning elements inside your composable."
+  }
+]

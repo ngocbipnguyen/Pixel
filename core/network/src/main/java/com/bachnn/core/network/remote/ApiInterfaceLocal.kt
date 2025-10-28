@@ -1,7 +1,8 @@
 package com.bachnn.core.network.remote
 
 import com.bachnn.core.network.model.Collection
-import com.bachnn.core.network.model.NetworkResponse
+import com.bachnn.core.network.model.MeetUpNet
+import com.bachnn.core.network.model.PhotographerEntity
 import com.bachnn.core.network.model.PixelsPhoto
 import retrofit2.http.GET
 import javax.inject.Singleton
@@ -25,4 +26,14 @@ interface ApiInterfaceLocal {
 
     @GET("medias.json")
     suspend fun getMediasById(id: Long): PixelsPhoto
+
+    @GET("photographer.json")
+    suspend fun getPhotographers(): List<PhotographerEntity>
+
+    @GET("photographer.json")
+    suspend fun getPhotographer(id: String): PhotographerEntity
+
+    @GET("meetup.json")
+    suspend fun getMeetups(): List<MeetUpNet>
+
 }
