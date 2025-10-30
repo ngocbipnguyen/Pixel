@@ -5,6 +5,7 @@ import androidx.room.Room
 import com.bachnn.core.database.local.AppDatabase
 import com.bachnn.core.database.local.dao.CollectionDao
 import com.bachnn.core.database.local.dao.PhotoDao
+import com.bachnn.core.database.local.dao.UserDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -33,6 +34,11 @@ class DatabaseModule {
     @Singleton
     fun providePixelPhotoDao(appDatabase: AppDatabase): PhotoDao{
         return  appDatabase.pixelPhotoDao()
+    }
+
+    @Provides
+    fun provideUserDao(appDatabase: AppDatabase): UserDao {
+        return appDatabase.userDao()
     }
 
 

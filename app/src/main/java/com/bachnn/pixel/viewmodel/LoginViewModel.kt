@@ -11,6 +11,9 @@ import androidx.credentials.GetCredentialRequest
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bachnn.data.model.User
+import com.bachnn.data.model.asExternalDataToEntity
+import com.bachnn.data.perf.UserPrefsRepo
+import com.bachnn.data.repository.FirstUserRepository
 import com.bachnn.pixel.R
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
@@ -33,7 +36,11 @@ sealed interface LoginUiState {
 }
 
 @HiltViewModel
-class LoginViewModel @Inject constructor(@ApplicationContext val context: Context) : ViewModel() {
+class LoginViewModel @Inject constructor(
+    @ApplicationContext val context: Context,
+    val userRepository: FirstUserRepository,
+    val userRepo: UserPrefsRepo
+) : ViewModel() {
     private val auth = FirebaseAuth.getInstance()
     var loginUiState: LoginUiState by mutableStateOf(LoginUiState.Loading)
         private set
@@ -102,7 +109,7 @@ class LoginViewModel @Inject constructor(@ApplicationContext val context: Contex
                     val urlPhoto = it.photoUrl.toString()
                     user = User(uid, name, email, urlPhoto)
                     signInSuccess(user)
-
+                    setUidPerf(user)
                 }
 
                 Log.e("okkk", "google token : $googleToken")
@@ -112,4 +119,10 @@ class LoginViewModel @Inject constructor(@ApplicationContext val context: Contex
             }
         }
     }
+
+    fun setUidPerf(user: User) = viewModelScope.launch {
+        userRepo.saveUid(user.uid)
+        userRepository.insertUser(user)
+    }
+
 }

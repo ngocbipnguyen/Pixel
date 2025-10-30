@@ -47,6 +47,7 @@ material3WindowSizeClassAndroid = "1.4.0"
 #facebook-login
 facebook = "16.2.0"
 constraintlayout-compose = "1.1.1"
+preferences-version = "1.1.7"
 
 
 [libraries]
@@ -116,6 +117,9 @@ androidx-material3-window-size-class1-android = { group = "androidx.compose.mate
 facebook-android-sdk = { module = "com.facebook.android:facebook-android-sdk", version.ref = "facebook" }
 #constraintlayout
 constraintlayout = { module = "androidx.constraintlayout:constraintlayout-compose", version.ref = "constraintlayout-compose" }
+#preferences
+preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "preferences-version" }
+
 
 
 [plugins]

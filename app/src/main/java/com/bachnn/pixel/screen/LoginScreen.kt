@@ -129,7 +129,9 @@ fun LoginPage(
                 onSignInFailed = {
 
                 },
-                signInSuccess
+                signInSuccess = { user ->
+                    viewModel.setUidPerf(user)
+                }
             )
         }
     }

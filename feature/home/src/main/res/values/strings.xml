@@ -9,4 +9,10 @@
     <string name="join">Join Challenge</string>
     <string name="leader_broad">LeaderBroad</string>
     <string name="meet_up">Upcoming Meetups</string>
+    <string name="error_uid_not">Uid did not found.</string>
+    <string name="total_View">Total view</string>
+
+    <string name="photo_tag">Photo</string>
+    <string name="mark_tag">Mark</string>
+    <string name="info_tag">Infomation</string>
 </resources>

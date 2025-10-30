@@ -55,4 +55,7 @@ dependencies {
 
     implementation(libs.kotlinx.serialization.json)
 
+    //preferences
+    implementation(libs.preferences)
+
 }

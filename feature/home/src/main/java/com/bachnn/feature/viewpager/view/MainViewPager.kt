@@ -59,7 +59,7 @@ fun MainViewPager(onClick: () -> Unit) {
                 }
 
                 4 -> {
-                    SettingsScreen(onClick)
+                    SettingsScreen(onClick = onClick)
                 }
             }
         }

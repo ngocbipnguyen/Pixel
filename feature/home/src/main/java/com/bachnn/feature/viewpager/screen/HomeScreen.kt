@@ -68,9 +68,13 @@ fun HomeScreen(user: User?, onClick: () -> Unit) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
                     window.insetsController?.show(WindowInsets.Type.statusBars())
                 } else {
-                    WindowInsetsControllerCompat(window, window.decorView).show(WindowInsetsCompat.Type.statusBars())
+                    WindowInsetsControllerCompat(
+                        window,
+                        window.decorView
+                    ).show(WindowInsetsCompat.Type.statusBars())
                 }
-                systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+                systemBarsBehavior =
+                    WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
             }
 
         }
@@ -144,7 +148,9 @@ fun HomePage(modifier: Modifier, user: User?, pages: Array<PixelPage>, onClick: 
                         Icon(
                             painter = painterResource(id = page.drawableResId),
                             contentDescription = title,
-                            modifier = Modifier.size(50.dp).padding(vertical = 8.dp, horizontal = 8.dp)
+                            modifier = Modifier
+                                .size(50.dp)
+                                .padding(vertical = 8.dp, horizontal = 8.dp)
                         )
                     },
                     unselectedContentColor = MaterialTheme.colorScheme.secondary
