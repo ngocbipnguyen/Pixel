@@ -49,6 +49,10 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+    implementation(libs.androidx.ui.tooling.preview)
+    implementation(libs.androidx.material3.window.size.class1.android)
+    implementation(platform(libs.androidx.compose.bom))
+    implementation("androidx.compose.material:material-icons-extended")
 
     // hilt
     implementation(libs.hilt.android)

@@ -15,4 +15,7 @@
     <string name="photo_tag">Photo</string>
     <string name="mark_tag">Mark</string>
     <string name="info_tag">Infomation</string>
+    <string name="title_content">You don\'t have any content yet.</string>
+    <string name="description_content">It\'s ok, we know it\'s probably hard to choose what to upload from all your amazing photos. You can come back and uploaded at ant time. In the meantime, how about some inspiration from the talented photographers on Pixel?</string>
+    <string name="inspired_btn">Get Inspired</string>
 </resources>
