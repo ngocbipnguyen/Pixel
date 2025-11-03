@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -51,7 +52,11 @@ fun ContentPage(modifier: Modifier = Modifier) {
 
         Button(
             onClick = {},
-            modifier = Modifier.clip(RoundedCornerShape(4.dp)).width(200.dp)
+            modifier = Modifier.width(200.dp),
+            shape = MaterialTheme.shapes.medium,
+            colors = ButtonDefaults.buttonColors(
+                containerColor = MaterialTheme.colorScheme.inversePrimary
+            )
         ) {
             Text(stringResource(R.string.inspired_btn), style = MaterialTheme.typography.titleLarge)
         }

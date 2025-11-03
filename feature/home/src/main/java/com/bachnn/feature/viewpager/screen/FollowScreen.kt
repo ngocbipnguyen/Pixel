@@ -25,6 +25,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -144,7 +145,7 @@ fun ChallengeGroup(
         )
         Text(
             stringResource(R.string.discription_challenge),
-            style = MaterialTheme.typography.titleSmall,
+            style = MaterialTheme.typography.titleMedium,
             modifier = Modifier.padding(start = 8.dp, end = 8.dp)
         )
         LazyHorizontalStaggeredGrid(
@@ -152,8 +153,8 @@ fun ChallengeGroup(
             state = listState,
             modifier = modifier
                 .fillMaxWidth()
-                .height(490.dp)
-                .padding(top = 24.dp, bottom = 24.dp)
+                .height(450.dp)
+                .padding(top = 12.dp, bottom = 16.dp)
         ) {
             items(collections, key = { it.id }) { it ->
                 if (it.medias.isNotEmpty()) {
@@ -175,7 +176,7 @@ fun ItemChallenge(modifier: Modifier, item: Collection) {
             modifier = Modifier
                 .width(screenWidthDp * 0.95f)
                 .align(alignment = Alignment.CenterHorizontally)
-                .height(280.dp), items = item.medias
+                .height(260.dp), items = item.medias
         )
         Text(
             item.title,
@@ -193,8 +194,8 @@ fun ItemChallenge(modifier: Modifier, item: Collection) {
                 onClick = {},
                 modifier = Modifier
                     .width(160.dp)
-                    .padding(end = 12.dp)
-                    .clip(RoundedCornerShape(8.dp))
+                    .padding(end = 12.dp),
+                shape = MaterialTheme.shapes.small
             ) {
                 Text("11 Days", style = MaterialTheme.typography.titleMedium)
             }
@@ -203,8 +204,8 @@ fun ItemChallenge(modifier: Modifier, item: Collection) {
                 onClick = {},
                 modifier = Modifier
                     .width(160.dp)
-                    .padding(end = 12.dp)
-                    .clip(RoundedCornerShape(8.dp))
+                    .padding(end = 12.dp),
+                shape = MaterialTheme.shapes.small
             ) {
                 Text("$30", style = MaterialTheme.typography.titleMedium)
             }
@@ -217,8 +218,11 @@ fun ItemChallenge(modifier: Modifier, item: Collection) {
             },
             modifier = Modifier
                 .width(screenWidthDp * 0.95f)
-                .align(alignment = Alignment.CenterHorizontally)
-                .clip(RoundedCornerShape(8.dp))
+                .align(alignment = Alignment.CenterHorizontally),
+            shape = MaterialTheme.shapes.small,
+            colors = ButtonDefaults.buttonColors(
+                containerColor = MaterialTheme.colorScheme.inversePrimary
+            )
         ) {
             Text(
                 stringResource(R.string.join), style = MaterialTheme.typography.titleLarge

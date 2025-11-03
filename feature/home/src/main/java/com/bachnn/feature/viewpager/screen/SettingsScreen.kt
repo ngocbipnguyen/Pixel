@@ -104,7 +104,8 @@ fun SettingsScreen(
             ) {
                 TabRow(
                     selectedTabIndex = pagerState.currentPage,
-                    containerColor = Color.Transparent
+                    containerColor = Color.Transparent,
+                    indicator = {}
 
                 ) {
                     pages.forEachIndexed { index, page ->
@@ -122,7 +123,8 @@ fun SettingsScreen(
                                         .padding(vertical = 8.dp, horizontal = 8.dp)
                                 )
                             },
-                            selectedContentColor = MaterialTheme.colorScheme.secondary
+                            selectedContentColor = MaterialTheme.colorScheme.inversePrimary,
+                            unselectedContentColor = MaterialTheme.colorScheme.secondary,
                         )
                     }
 
@@ -132,7 +134,8 @@ fun SettingsScreen(
                     state = pagerState,
                     modifier = Modifier
                         .fillMaxSize()
-                        .weight(1f)
+                        .weight(1f),
+                    userScrollEnabled = false
                 ) { page ->
                     when (pages[page]) {
                         SettingsPage.PHOTO -> {

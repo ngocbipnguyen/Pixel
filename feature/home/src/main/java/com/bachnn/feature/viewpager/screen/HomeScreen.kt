@@ -104,7 +104,8 @@ fun HomePage(modifier: Modifier, user: User?, pages: Array<PixelPage>, onClick: 
             state = pagerState,
             modifier = Modifier
                 .fillMaxSize()
-                .weight(1f)
+                .weight(1f),
+            userScrollEnabled = false
         ) { page ->
             when (pages[page]) {
                 PixelPage.PHOTO_PAGE -> {
@@ -137,7 +138,8 @@ fun HomePage(modifier: Modifier, user: User?, pages: Array<PixelPage>, onClick: 
 
         // Tab Row
         TabRow(
-            selectedTabIndex = pagerState.currentPage
+            selectedTabIndex = pagerState.currentPage,
+            indicator = {}
         ) {
             pages.forEachIndexed { index, page ->
                 val title = stringResource(id = page.titleResId)
@@ -153,7 +155,8 @@ fun HomePage(modifier: Modifier, user: User?, pages: Array<PixelPage>, onClick: 
                                 .padding(vertical = 8.dp, horizontal = 8.dp)
                         )
                     },
-                    unselectedContentColor = MaterialTheme.colorScheme.secondary
+                    unselectedContentColor = MaterialTheme.colorScheme.secondary,
+                    selectedContentColor = MaterialTheme.colorScheme.inversePrimary
                 )
             }
         }

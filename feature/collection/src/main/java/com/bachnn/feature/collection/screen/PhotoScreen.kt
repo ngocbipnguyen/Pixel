@@ -1,5 +1,6 @@
 package com.bachnn.feature.collection.screen
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -23,6 +24,7 @@ import androidx.compose.material.icons.filled.Send
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -130,7 +132,7 @@ fun PhotoPage(
             ItemPhoto(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 4.dp, bottom = 4.dp), it
+                    .padding(bottom = 4.dp), it
             )
         }
     }
@@ -164,7 +166,7 @@ fun ItemPhoto(modifier: Modifier, photo: PixelsPhoto) {
             CircleNetworkImage(
                 modifier = Modifier
                     .padding(
-                        top = 8.dp, start = 8.dp, bottom = 8.dp, end = 8.dp
+                       start = 8.dp, bottom = 8.dp, end = 8.dp
                     )
                     .size(42.dp),
                 photo.src.medium
@@ -174,15 +176,16 @@ fun ItemPhoto(modifier: Modifier, photo: PixelsPhoto) {
                 modifier = Modifier
                     .fillMaxWidth()
                     .weight(1f),
-                style = MaterialTheme.typography.titleMedium
+                style = MaterialTheme.typography.titleLarge
             )
 
             OutlinedButton(
                 onClick = {
 
                 }, modifier = Modifier.padding(
-                    top = 8.dp, start = 8.dp, bottom = 8.dp, end = 8.dp
-                )
+                   start = 8.dp, bottom = 8.dp, end = 8.dp
+                ),
+                shape = MaterialTheme.shapes.small
             ) {
                 Text(stringResource(R.string.follow))
             }
@@ -198,9 +201,9 @@ fun ItemPhoto(modifier: Modifier, photo: PixelsPhoto) {
 
                 }, modifier = Modifier
                     .padding(
-                        top = 8.dp, start = 8.dp, bottom = 8.dp, end = 8.dp
+                        top = 4.dp, start = 4.dp, bottom = 4.dp, end = 4.dp
                     )
-                    .size(50.dp)
+                    .size(56.dp)
             ) {
                 Icon(Icons.Default.FavoriteBorder, contentDescription = "favorite")
             }
@@ -210,9 +213,9 @@ fun ItemPhoto(modifier: Modifier, photo: PixelsPhoto) {
 
                 }, modifier = Modifier
                     .padding(
-                        top = 8.dp, bottom = 8.dp
+                        top = 4.dp, bottom = 4.dp
                     )
-                    .size(50.dp)
+                    .size(56.dp)
             ) {
                 Icon(Icons.Default.Send, contentDescription = "send")
             }
@@ -227,11 +230,19 @@ fun ItemPhoto(modifier: Modifier, photo: PixelsPhoto) {
                 onClick = {
 
                 },
-                modifier = Modifier.padding(
-                    top = 8.dp, start = 8.dp, bottom = 8.dp, end = 8.dp
-                )
+                modifier = Modifier
+                    .padding(
+                        top = 8.dp, start = 8.dp, bottom = 8.dp, end = 8.dp
+                    ),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.inversePrimary
+                ),
+                shape = MaterialTheme.shapes.small,
             ) {
-                Text(stringResource(R.string.download), style = MaterialTheme.typography.bodyMedium)
+                Text(
+                    stringResource(R.string.download),
+                    style = MaterialTheme.typography.bodyLarge,
+                    )
             }
 
         }

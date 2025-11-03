@@ -66,7 +66,8 @@ fun MainViewPager(onClick: () -> Unit) {
 
         TabRow(
             modifier = Modifier.fillMaxWidth(),
-            selectedTabIndex = pagerState.currentPage
+            selectedTabIndex = pagerState.currentPage,
+            indicator = {}
         ) {
             tabs.forEachIndexed { index, res ->
                 Tab(
