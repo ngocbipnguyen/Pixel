@@ -4,6 +4,7 @@ import android.R
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -32,17 +33,27 @@ fun MarkScreen() {
 
 @Composable
 fun MarkPage(modifier: Modifier) {
-    Row(modifier = modifier.fillMaxWidth().width(150.dp), horizontalArrangement = Arrangement.Center) {
-        ItemMark(
-            modifier = Modifier,
-            url = "https://images.pexels.com/photos/33162053/pexels-photo-33162053.jpeg?auto=compress&cs=tinysrgb&h=350",
-            name = "Favorite"
-        )
-        ItemMark(
-            modifier = Modifier,
-            url = "https://images.pexels.com/photos/33123695/pexels-photo-33123695.jpeg?auto=compress&cs=tinysrgb&h=350",
-            name = "Download"
-        )
+    Column(modifier = modifier) {
+        Row(
+            modifier = modifier
+                .fillMaxWidth()
+                .width(150.dp),
+            horizontalArrangement = Arrangement.Center
+        ) {
+            ItemMark(
+                modifier = Modifier.weight(1f).align(alignment = Alignment.CenterVertically),
+                url = "https://images.pexels.com/photos/33162053/pexels-photo-33162053.jpeg?auto=compress&cs=tinysrgb&h=350",
+                name = "Favorite"
+            )
+            ItemMark(
+                modifier = Modifier.weight(1f).align(alignment = Alignment.CenterVertically),
+                url = "https://images.pexels.com/photos/33123695/pexels-photo-33123695.jpeg?auto=compress&cs=tinysrgb&h=350",
+                name = "Download"
+            )
+        }
+
+        Spacer(Modifier.weight(1f))
+
     }
 }
 
@@ -59,7 +70,6 @@ fun ItemMark(modifier: Modifier, url: String, name: String) {
                 .width(150.dp)
                 .height(150.dp)
                 .clip(RoundedCornerShape(8.dp))
-                .align(alignment = Alignment.CenterHorizontally)
         )
         Text(name, style = MaterialTheme.typography.titleMedium)
     }
