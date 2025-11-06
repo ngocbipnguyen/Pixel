@@ -16,6 +16,8 @@ data class PixelsPhoto(
     val avgColor: String,
     val src: PhotoSrc,
     val timestamps: Long,
+    var isFavorite: Boolean,
+    var isFollow: Boolean
 )
 
 fun PixelsPhoto.asExternalNetworkToEntityModel() = PixelsPhotoEntity(
@@ -30,7 +32,9 @@ fun PixelsPhoto.asExternalNetworkToEntityModel() = PixelsPhotoEntity(
     height = height,
     avgColor = avgColor,
     src = src.asExternalNetworkToEntityModel(),
-    timestamps = timestamps
+    timestamps = timestamps,
+    isFavorite = false,
+    isFollow = false
 )
 
 fun PixelsPhotoEntity.asExternalEntityToDataModel() = com.bachnn.data.model.PixelsPhoto(
@@ -45,7 +49,9 @@ fun PixelsPhotoEntity.asExternalEntityToDataModel() = com.bachnn.data.model.Pixe
     height = height,
     avgColor = avgColor,
     src = src.asExternalEntityToDataModel(),
-    timestamps = timestamps
+    timestamps = timestamps,
+    isFavorite = isFavorite,
+    isFollow = isFollow
 )
 
 fun PixelsPhoto.asExternalNetworkToDataModel() = com.bachnn.data.model.PixelsPhoto(
@@ -60,5 +66,7 @@ fun PixelsPhoto.asExternalNetworkToDataModel() = com.bachnn.data.model.PixelsPho
     height = height,
     avgColor = avgColor,
     src = src.asExternalNetworkToDataModel(),
-    timestamps = timestamps
+    timestamps = timestamps,
+    isFollow = false,
+    isFavorite = false
 )

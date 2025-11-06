@@ -40,4 +40,12 @@ class FirstPixelRepository @Inject constructor(
         return pixelDao.getPixelPhotoById(id).asExternalEntityToDataModel()
     }
 
+    override suspend fun updateFavorite(id: Long, isFavorite: Boolean) {
+        return pixelDao.updateFavorite(id, isFavorite)
+    }
+
+    override suspend fun updateFollow(id: Long, isFollow: Boolean) {
+        return pixelDao.updateFollow(id, isFollow)
+    }
+
 }

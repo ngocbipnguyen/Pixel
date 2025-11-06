@@ -18,6 +18,7 @@ import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.foundation.lazy.staggeredgrid.rememberLazyStaggeredGridState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Send
@@ -39,11 +40,15 @@ import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -132,7 +137,8 @@ fun PhotoPage(
             ItemPhoto(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(bottom = 4.dp), it
+                    .padding(bottom = 4.dp), it,
+                viewModel
             )
         }
     }
@@ -155,7 +161,11 @@ fun PhotoPage(
 }
 
 @Composable
-fun ItemPhoto(modifier: Modifier, photo: PixelsPhoto) {
+fun ItemPhoto(modifier: Modifier, photo: PixelsPhoto, viewModel: PhotoViewModel) {
+
+    var followState by remember { mutableStateOf(photo.isFollow) }
+    var favoriteState by remember { mutableStateOf(photo.isFavorite) }
+
     Column(
         modifier = modifier,
     ) {
@@ -166,7 +176,7 @@ fun ItemPhoto(modifier: Modifier, photo: PixelsPhoto) {
             CircleNetworkImage(
                 modifier = Modifier
                     .padding(
-                       start = 8.dp, bottom = 8.dp, end = 8.dp
+                        start = 8.dp, bottom = 8.dp, end = 8.dp
                     )
                     .size(42.dp),
                 photo.src.medium
@@ -179,16 +189,24 @@ fun ItemPhoto(modifier: Modifier, photo: PixelsPhoto) {
                 style = MaterialTheme.typography.titleLarge
             )
 
+
             OutlinedButton(
                 onClick = {
-
+                    followState = !photo.isFollow
+                    viewModel.updateFollow(id = photo.id, follow = !photo.isFollow)
+                    photo.isFollow = !photo.isFollow
                 }, modifier = Modifier.padding(
-                   start = 8.dp, bottom = 8.dp, end = 8.dp
+                    start = 8.dp, bottom = 8.dp, end = 8.dp
                 ),
                 shape = MaterialTheme.shapes.small
             ) {
-                Text(stringResource(R.string.follow))
+                if (followState) {
+                    Text(stringResource(R.string.unfollow))
+                } else {
+                    Text(stringResource(R.string.follow))
+                }
             }
+
         }
 
         ShowImage(photo)
@@ -198,14 +216,20 @@ fun ItemPhoto(modifier: Modifier, photo: PixelsPhoto) {
         ) {
             IconButton(
                 onClick = {
-
+                    favoriteState = !photo.isFavorite
+                    viewModel.updateFavorite(id = photo.id, favorite = !photo.isFavorite)
+                    photo.isFavorite = !photo.isFavorite
                 }, modifier = Modifier
                     .padding(
                         top = 4.dp, start = 4.dp, bottom = 4.dp, end = 4.dp
                     )
                     .size(56.dp)
             ) {
-                Icon(Icons.Default.FavoriteBorder, contentDescription = "favorite")
+                if (favoriteState) {
+                    Icon(Icons.Default.Favorite, contentDescription = "favorite", tint = Color.Red)
+                } else {
+                    Icon(Icons.Default.FavoriteBorder, contentDescription = "favorite")
+                }
             }
 
             IconButton(
@@ -242,7 +266,7 @@ fun ItemPhoto(modifier: Modifier, photo: PixelsPhoto) {
                 Text(
                     stringResource(R.string.download),
                     style = MaterialTheme.typography.bodyLarge,
-                    )
+                )
             }
 
         }

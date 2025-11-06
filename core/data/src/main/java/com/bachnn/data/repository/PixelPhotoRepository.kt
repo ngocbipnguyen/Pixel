@@ -11,4 +11,8 @@ interface PixelPhotoRepository {
 
     suspend fun getPhoto(id: Int): PixelsPhoto
 
+    suspend fun updateFavorite(id: Long, isFavorite: Boolean)
+
+    suspend fun updateFollow(id: Long, isFavorite: Boolean)
+
 }

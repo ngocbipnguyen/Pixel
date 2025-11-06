@@ -31,4 +31,11 @@ interface PhotoDao {
 
     @Query("SELECT MAX(timestamps) FROM pixels_photos")
     suspend fun getLatestTimestamp(): Long?
+
+    @Query("UPDATE pixels_photos SET isFavorite = :isFavorite WHERE id = :id")
+    suspend fun updateFavorite(id: Long, isFavorite: Boolean)
+
+    @Query("UPDATE pixels_photos SET isFollow = :isFollow WHERE id = :id")
+    suspend fun updateFollow(id: Long, isFollow: Boolean)
+
 }

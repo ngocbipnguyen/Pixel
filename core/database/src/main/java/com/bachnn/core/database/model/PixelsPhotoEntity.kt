@@ -17,7 +17,9 @@ data class PixelsPhotoEntity(
     val height: Int,
     val avgColor: String,
     val timestamps: Long,
-    @Embedded val src: PhotoSrcEntity  // nhúng PhotoSrc
+    @Embedded val src: PhotoSrcEntity,  // nhúng PhotoSrc
+    var isFavorite: Boolean,
+    var isFollow: Boolean
 )
 
 //fun PixelsPhotoEntity.asExternalModel(): PixelsPhoto {

@@ -36,4 +36,16 @@ class PhotoViewModel @Inject constructor(val firstPixelRepository: FirstPixelRep
             }
         }
     }
+
+    fun updateFavorite(id: Long, favorite: Boolean) {
+        viewModelScope.launch {
+            firstPixelRepository.updateFavorite(id, favorite)
+        }
+    }
+
+    fun updateFollow(id: Long, follow: Boolean) {
+        viewModelScope.launch {
+            firstPixelRepository.updateFollow(id, follow)
+        }
+    }
 }
