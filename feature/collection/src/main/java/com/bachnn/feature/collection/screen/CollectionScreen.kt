@@ -79,7 +79,9 @@ fun CollectionPagerScreen(
         verticalItemSpacing = 0.dp,
         content = {
             items(collections, key = { it.id }) { it ->
-                CollectionItem(it, Modifier, onClickCollection)
+                if (it.medias.isNotEmpty()) {
+                    CollectionItem(it, Modifier, onClickCollection)
+                }
             }
         }
     )
