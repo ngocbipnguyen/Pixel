@@ -132,9 +132,12 @@ fun HomePage(modifier: Modifier, user: User?, pages: Array<PixelPage>, onClick: 
         ) { page ->
             when (pages[page]) {
                 PixelPage.PHOTO_PAGE -> {
-                    PhotoScreen(onclick = {
+                    PhotoScreen(onClickPhoto = {
 
-                    })
+                    },
+                        onClickPhotographer = {
+
+                        })
                 }
 
                 PixelPage.CHALLENGE_PAGE -> {

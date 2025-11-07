@@ -1,5 +1,9 @@
 package com.bachnn.feature.collection.viewmodel
 
+import android.app.DownloadManager
+import android.content.Context
+import android.net.Uri
+import android.os.Environment
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -10,6 +14,8 @@ import com.bachnn.data.repository.FirstPixelRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import androidx.core.net.toUri
+import java.io.File
 
 sealed interface PixelUiState {
     data class Success(val pixels: List<PixelsPhoto>) : PixelUiState
@@ -47,5 +53,23 @@ class PhotoViewModel @Inject constructor(val firstPixelRepository: FirstPixelRep
         viewModelScope.launch {
             firstPixelRepository.updateFollow(id, follow)
         }
+    }
+
+    fun download(context: Context, original: String) {
+        val pixelFile = File(Environment.DIRECTORY_DOWNLOADS, "pixel")
+        if (!pixelFile.exists())  {
+            pixelFile.mkdirs()
+        }
+        val namePhoto =  original.substringAfterLast('/')
+        val request = DownloadManager.Request(original.toUri())
+            .setTitle(namePhoto)
+            .setTitle("Downloading image ...")
+            .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
+            .setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, "pixel/$namePhoto")
+            .setAllowedOverMetered(true)
+            .setAllowedOverRoaming(true)
+
+        val download = context.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
+        download.enqueue(request)
     }
 }

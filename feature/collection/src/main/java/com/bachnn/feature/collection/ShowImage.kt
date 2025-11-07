@@ -32,7 +32,8 @@ import com.bumptech.glide.signature.ObjectKey
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 fun ShowImage(
-    photo: PixelsPhoto
+    photo: PixelsPhoto,
+    onClickPhoto: (PixelsPhoto) -> Unit
 ) {
     val signature = ObjectKey(photo.src.original)
     val context = LocalContext.current
@@ -57,7 +58,7 @@ fun ShowImage(
                 .size(screenWidthDp, pxToDp(height.toInt()).dp)
                 .fillMaxWidth()
                 .clickable {
-
+                    // todo
                 },
             contentScale = ContentScale.Fit
         ) {

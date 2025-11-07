@@ -1,6 +1,9 @@
 package com.bachnn.feature.collection.screen
 
+import android.content.Context
+import android.content.Intent
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -68,7 +71,11 @@ import com.bumptech.glide.integration.compose.GlideImage
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PhotoScreen(onclick: () -> Unit, viewModel: PhotoViewModel = hiltViewModel()) {
+fun PhotoScreen(
+    onClickPhoto: (PixelsPhoto) -> Unit,
+    onClickPhotographer: (Long) -> Unit,
+    viewModel: PhotoViewModel = hiltViewModel()
+) {
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
 
 
@@ -95,7 +102,9 @@ fun PhotoScreen(onclick: () -> Unit, viewModel: PhotoViewModel = hiltViewModel()
                     modifier = Modifier.padding(top = contentPadding.calculateTopPadding()),
                     viewModel,
                     photos,
-                    scrollBehavior
+                    scrollBehavior,
+                    onClickPhoto,
+                    onClickPhotographer
                 )
             }
 
@@ -117,7 +126,9 @@ fun PhotoPage(
     modifier: Modifier,
     viewModel: PhotoViewModel,
     photos: List<PixelsPhoto>,
-    scrollBehavior: TopAppBarScrollBehavior
+    scrollBehavior: TopAppBarScrollBehavior,
+    onClickPhoto: (PixelsPhoto) -> Unit,
+    onClickPhotographer: (Long) -> Unit
 ) {
     val listState = rememberLazyStaggeredGridState()
 
@@ -138,7 +149,9 @@ fun PhotoPage(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = 4.dp), it,
-                viewModel
+                viewModel,
+                onClickPhoto,
+                onClickPhotographer
             )
         }
     }
@@ -161,10 +174,17 @@ fun PhotoPage(
 }
 
 @Composable
-fun ItemPhoto(modifier: Modifier, photo: PixelsPhoto, viewModel: PhotoViewModel) {
+fun ItemPhoto(
+    modifier: Modifier,
+    photo: PixelsPhoto,
+    viewModel: PhotoViewModel,
+    onClickPhoto: (PixelsPhoto) -> Unit,
+    onClickPhotographer: (Long) -> Unit
+) {
 
     var followState by remember { mutableStateOf(photo.isFollow) }
     var favoriteState by remember { mutableStateOf(photo.isFavorite) }
+    val context = LocalContext.current
 
     Column(
         modifier = modifier,
@@ -178,14 +198,20 @@ fun ItemPhoto(modifier: Modifier, photo: PixelsPhoto, viewModel: PhotoViewModel)
                     .padding(
                         start = 8.dp, bottom = 8.dp, end = 8.dp
                     )
-                    .size(42.dp),
+                    .size(42.dp)
+                    .clickable {
+                        onClickPhotographer(photo.photographerId)
+                    },
                 photo.src.medium
             )
             Text(
                 photo.photographer,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .weight(1f),
+                    .weight(1f)
+                    .padding(
+                        start = 8.dp, bottom = 8.dp, end = 8.dp
+                    ),
                 style = MaterialTheme.typography.titleLarge
             )
 
@@ -209,7 +235,9 @@ fun ItemPhoto(modifier: Modifier, photo: PixelsPhoto, viewModel: PhotoViewModel)
 
         }
 
-        ShowImage(photo)
+        ShowImage(photo) { it ->
+            onClickPhoto(it)
+        }
 
         Row(
             modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically
@@ -234,6 +262,8 @@ fun ItemPhoto(modifier: Modifier, photo: PixelsPhoto, viewModel: PhotoViewModel)
 
             IconButton(
                 onClick = {
+                    //todo share image.
+                    shareLink(context, photo.src.original)
 
                 }, modifier = Modifier
                     .padding(
@@ -252,7 +282,8 @@ fun ItemPhoto(modifier: Modifier, photo: PixelsPhoto, viewModel: PhotoViewModel)
 
             Button(
                 onClick = {
-
+                    //todo download
+                    viewModel.download(context, photo.src.original)
                 },
                 modifier = Modifier
                     .padding(
@@ -272,4 +303,14 @@ fun ItemPhoto(modifier: Modifier, photo: PixelsPhoto, viewModel: PhotoViewModel)
         }
 
     }
+}
+
+
+fun shareLink(context: Context, url: String) {
+    val sendIntent = Intent(Intent.ACTION_SEND).apply {
+        type = "text/plain"
+        putExtra(Intent.EXTRA_TEXT, url)
+    }
+    val shareIntent = Intent.createChooser(sendIntent, "Share link via")
+    context.startActivity(shareIntent)
 }

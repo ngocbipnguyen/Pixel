@@ -41,7 +41,13 @@ fun MainViewPager(onClick: () -> Unit) {
         HorizontalPager(state = pagerState) { page ->
             when (page) {
                 0 -> {
-                    PhotoScreen(onclick = onClick)
+                    PhotoScreen(
+                        onClickPhoto = {
+
+                        },
+                        onClickPhotographer = {
+
+                        })
                 }
 
                 1 -> {
