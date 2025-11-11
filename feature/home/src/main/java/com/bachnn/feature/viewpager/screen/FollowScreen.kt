@@ -2,6 +2,7 @@ package com.bachnn.feature.viewpager.screen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -66,7 +67,7 @@ import com.bumptech.glide.integration.compose.GlideImage
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FollowScreen(
-    viewModel: FollowViewModel = hiltViewModel(), onClick: () -> Unit
+    viewModel: FollowViewModel = hiltViewModel(), navigateHome: (Int, Any) -> Unit
 ) {
 
     Scaffold { contentPadding ->
@@ -77,6 +78,7 @@ fun FollowScreen(
                         .fillMaxSize()
                         .padding(top = contentPadding.calculateTopPadding()),
                     viewModel = viewModel,
+                    navigateHome
                 )
             }
 
@@ -97,6 +99,7 @@ fun FollowScreen(
 @Composable
 fun FollowPage(
     modifier: Modifier, viewModel: FollowViewModel,
+    navigateHome: (Int, Any) -> Unit
 ) {
     val uiState = viewModel.followUiState as FollowUiState.Success
     val configuration = LocalConfiguration.current
@@ -106,15 +109,18 @@ fun FollowPage(
         ChallengeGroup(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 12.dp), uiState.collections
+                .padding(top = 12.dp), uiState.collections,
+            navigateHome
         )
         LeaderBroadGroup(
-            modifier = Modifier.width(screenWidthDp), uiState.photographers
+            modifier = Modifier.width(screenWidthDp), uiState.photographers,
+            navigateHome
         )
         MeetupsGroup(
             modifier = Modifier
                 .width(screenWidthDp),
-            uiState.meetup
+            uiState.meetup,
+            navigateHome
         )
     }
 }
@@ -128,7 +134,8 @@ fun FollowPage(
 
 @Composable
 fun ChallengeGroup(
-    modifier: Modifier, collections: List<Collection>
+    modifier: Modifier, collections: List<Collection>,
+    navigateHome: (Int, Any) -> Unit
 ) {
 
     val listState = rememberLazyStaggeredGridState()
@@ -159,7 +166,8 @@ fun ChallengeGroup(
             items(collections, key = { it.id }) { it ->
                 if (it.medias.isNotEmpty()) {
                     ItemChallenge(
-                        modifier = Modifier.fillMaxWidth(), item = it
+                        modifier = Modifier.fillMaxWidth(), item = it,
+                        navigateHome
                     )
                 }
             }
@@ -168,7 +176,7 @@ fun ChallengeGroup(
 }
 
 @Composable
-fun ItemChallenge(modifier: Modifier, item: Collection) {
+fun ItemChallenge(modifier: Modifier, item: Collection, navigateHome: (Int, Any) -> Unit) {
     val configuration = LocalConfiguration.current
     val screenWidthDp = configuration.screenWidthDp.dp
     Column(modifier = modifier.width(screenWidthDp)) {
@@ -188,7 +196,10 @@ fun ItemChallenge(modifier: Modifier, item: Collection) {
             modifier = Modifier
                 .width(screenWidthDp * 0.95f)
                 .align(alignment = Alignment.CenterHorizontally)
-                .padding(top = 12.dp, bottom = 12.dp),
+                .padding(top = 12.dp, bottom = 12.dp)
+                .clickable {
+                    navigateHome(3, item)
+                },
         ) {
             OutlinedButton(
                 onClick = {},
@@ -214,7 +225,7 @@ fun ItemChallenge(modifier: Modifier, item: Collection) {
 
         Button(
             onClick = {
-
+                navigateHome(4, "Join Challenge")
             },
             modifier = Modifier
                 .width(screenWidthDp * 0.95f)
@@ -283,7 +294,11 @@ fun GroupPhoto(modifier: Modifier, items: List<PhotoSrc>) {
 * */
 
 @Composable
-fun LeaderBroadGroup(modifier: Modifier, collections: List<Photographer>) {
+fun LeaderBroadGroup(
+    modifier: Modifier,
+    collections: List<Photographer>,
+    navigateHome: (Int, Any) -> Unit
+) {
     val leaderBroadState = rememberLazyStaggeredGridState()
     val configuration = LocalConfiguration.current
     val screenWidthDp = configuration.screenWidthDp.dp
@@ -305,7 +320,7 @@ fun LeaderBroadGroup(modifier: Modifier, collections: List<Photographer>) {
         ) {
             items(collections, key = { it.id }) { it ->
                 ItemLeaderBroadCircle(
-                    modifier = Modifier.width(screenWidthDp), item = it, screenWidthDp * 0.95f
+                    modifier = Modifier.width(screenWidthDp), item = it, screenWidthDp * 0.95f, navigateHome
                 )
             }
         }
@@ -314,7 +329,12 @@ fun LeaderBroadGroup(modifier: Modifier, collections: List<Photographer>) {
 
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
-fun ItemLeaderBroadCircle(modifier: Modifier, item: Photographer, screenWidthDp: Dp) {
+fun ItemLeaderBroadCircle(
+    modifier: Modifier,
+    item: Photographer,
+    screenWidthDp: Dp,
+    navigateHome: (Int, Any) -> Unit
+) {
     Card(
         modifier = modifier.clip(RoundedCornerShape(8.dp)), colors = CardDefaults.cardColors(
             containerColor = Color.Transparent
@@ -328,6 +348,9 @@ fun ItemLeaderBroadCircle(modifier: Modifier, item: Photographer, screenWidthDp:
                     .width(screenWidthDp)
                     .height(160.dp)
                     .align(alignment = Alignment.CenterHorizontally)
+                    .clickable {
+                        navigateHome(5, item)
+                    }
             ) {
                 GlideImage(
                     model = item.photos[0].medium,
@@ -353,7 +376,10 @@ fun ItemLeaderBroadCircle(modifier: Modifier, item: Photographer, screenWidthDp:
                             RoundedCornerShape(
                                 topEnd = 8.dp, bottomEnd = 8.dp
                             )
-                        ), // Add clipping for better UI
+                        )
+                        .clickable {
+                            navigateHome(5, item)
+                        }, // Add clipping for better UI
                     contentScale = ContentScale.Crop,
                 )
             }
@@ -371,7 +397,7 @@ fun ItemLeaderBroadCircle(modifier: Modifier, item: Photographer, screenWidthDp:
             )
             OutlinedButton(
                 onClick = {
-
+                    navigateHome(6, "Follow")
                 },
                 modifier = Modifier
                     .offset(y = (-12).dp)
@@ -388,7 +414,7 @@ fun ItemLeaderBroadCircle(modifier: Modifier, item: Photographer, screenWidthDp:
 }
 
 @Composable
-fun MeetupsGroup(modifier: Modifier, collections: List<MeetUp>) {
+fun MeetupsGroup(modifier: Modifier, collections: List<MeetUp>, navigateHome: (Int, Any) -> Unit) {
 
     val meetupBroadState = rememberLazyStaggeredGridState()
     val configuration = LocalConfiguration.current
@@ -410,7 +436,7 @@ fun MeetupsGroup(modifier: Modifier, collections: List<MeetUp>) {
         ) {
             items(collections, key = { it.id }) { it ->
                 ItemMeetup(
-                    modifier = Modifier.fillMaxWidth(), item = it, screenWidthDp
+                    modifier = Modifier.fillMaxWidth(), item = it, screenWidthDp,navigateHome
                 )
             }
         }
@@ -419,11 +445,18 @@ fun MeetupsGroup(modifier: Modifier, collections: List<MeetUp>) {
 
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
-fun ItemMeetup(modifier: Modifier, item: MeetUp, screenWidthDp: Dp) {
+fun ItemMeetup(
+    modifier: Modifier,
+    item: MeetUp,
+    screenWidthDp: Dp,
+    navigateHome: (Int, Any) -> Unit
+) {
     Column(
         modifier = modifier
             .width(screenWidthDp)
-            .padding(start = 4.dp, end = 4.dp)
+            .padding(start = 4.dp, end = 4.dp).clickable{
+                navigateHome(7,item)
+            }
     ) {
         GlideImage(
             model = item.url,

@@ -23,12 +23,12 @@ import com.bachnn.feature.viewpager.R
 
 
 @Composable
-fun ContentScreen(modifier: Modifier = Modifier) {
-    ContentPage(modifier.fillMaxSize())
+fun ContentScreen(modifier: Modifier = Modifier, navigateHome: (Int, Any) -> Unit) {
+    ContentPage(modifier.fillMaxSize(), navigateHome)
 }
 
 @Composable
-fun ContentPage(modifier: Modifier = Modifier) {
+fun ContentPage(modifier: Modifier = Modifier, navigateHome: (Int, Any) -> Unit) {
     Column(
         modifier = modifier.padding(start = 4.dp, end = 4.dp),
         horizontalAlignment = Alignment.CenterHorizontally
@@ -51,7 +51,7 @@ fun ContentPage(modifier: Modifier = Modifier) {
         Spacer(Modifier.height(16.dp))
 
         Button(
-            onClick = {},
+            onClick = {navigateHome(10, "Get Inspired")},
             modifier = Modifier.width(200.dp),
             shape = MaterialTheme.shapes.medium,
             colors = ButtonDefaults.buttonColors(
@@ -68,5 +68,7 @@ fun ContentPage(modifier: Modifier = Modifier) {
 @Preview(showBackground = true)
 @Composable
 fun ContentPreview() {
-    ContentScreen()
+    ContentScreen(navigateHome =  { action, data ->
+
+    })
 }

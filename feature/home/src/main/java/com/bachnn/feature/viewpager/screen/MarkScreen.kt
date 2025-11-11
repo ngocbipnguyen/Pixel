@@ -1,11 +1,10 @@
 package com.bachnn.feature.viewpager.screen
 
-import android.R
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -24,15 +23,16 @@ import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 
 @Composable
-fun MarkScreen() {
+fun MarkScreen(navigateHome: (Int, Any) -> Unit) {
     MarkPage(
         modifier = Modifier
-            .padding(4.dp)
+            .padding(4.dp),
+        navigateHome
     )
 }
 
 @Composable
-fun MarkPage(modifier: Modifier) {
+fun MarkPage(modifier: Modifier, navigateHome: (Int, Any) -> Unit) {
     Column(modifier = modifier) {
         Row(
             modifier = modifier
@@ -44,12 +44,16 @@ fun MarkPage(modifier: Modifier) {
                 modifier = Modifier.weight(1f).align(alignment = Alignment.CenterVertically),
                 url = "https://images.pexels.com/photos/33162053/pexels-photo-33162053.jpeg?auto=compress&cs=tinysrgb&h=350",
                 name = "Favorite"
-            )
+            ) {
+                navigateHome(11, "Favorite")
+            }
             ItemMark(
                 modifier = Modifier.weight(1f).align(alignment = Alignment.CenterVertically),
                 url = "https://images.pexels.com/photos/33123695/pexels-photo-33123695.jpeg?auto=compress&cs=tinysrgb&h=350",
                 name = "Download"
-            )
+            ) {
+                navigateHome(12, "Download")
+            }
         }
 
         Spacer(Modifier.weight(1f))
@@ -59,7 +63,7 @@ fun MarkPage(modifier: Modifier) {
 
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable()
-fun ItemMark(modifier: Modifier, url: String, name: String) {
+fun ItemMark(modifier: Modifier, url: String, name: String, navigateHome: () -> Unit) {
     Column(modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally) {
         GlideImage(
             model = url,
@@ -70,6 +74,9 @@ fun ItemMark(modifier: Modifier, url: String, name: String) {
                 .width(150.dp)
                 .height(150.dp)
                 .clip(RoundedCornerShape(8.dp))
+                .clickable{
+                    navigateHome
+                }
         )
         Text(name, style = MaterialTheme.typography.titleMedium)
     }
@@ -79,5 +86,7 @@ fun ItemMark(modifier: Modifier, url: String, name: String) {
 @Preview(showBackground = true)
 @Composable
 fun MarkPreview() {
-    MarkScreen()
+    MarkScreen(navigateHome = { action, data ->
+
+    })
 }

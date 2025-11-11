@@ -59,6 +59,7 @@ fun ShowImage(
                 .fillMaxWidth()
                 .clickable {
                     // todo
+                    onClickPhoto(photo)
                 },
             contentScale = ContentScale.Fit
         ) {

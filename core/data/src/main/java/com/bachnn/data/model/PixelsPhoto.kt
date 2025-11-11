@@ -2,7 +2,10 @@ package com.bachnn.data.model
 
 import com.bachnn.core.database.model.PixelsPhotoEntity
 import com.bachnn.core.network.model.PixelsPhoto
+import kotlinx.serialization.Serializable
 
+
+@Serializable
 data class PixelsPhoto(
     val id: Long,
     val idCollection: String,

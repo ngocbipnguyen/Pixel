@@ -75,7 +75,7 @@ enum class PixelPage(
 }
 
 @Composable
-fun HomeScreen(user: User?, onClick: () -> Unit) {
+fun HomeScreen(user: User?, navigateHome: (Int, Any) -> Unit) {
     val pages = PixelPage.values()
 
     val context = LocalContext.current
@@ -110,13 +110,18 @@ fun HomeScreen(user: User?, onClick: () -> Unit) {
             modifier = Modifier.padding(top = contentPadding.calculateTopPadding()),
             user = user,
             pages,
-            onClick
+            navigateHome
         )
     }
 }
 
 @Composable
-fun HomePage(modifier: Modifier, user: User?, pages: Array<PixelPage>, onClick: () -> Unit) {
+fun HomePage(
+    modifier: Modifier,
+    user: User?,
+    pages: Array<PixelPage>,
+    navigateHome: (Int, Any) -> Unit
+) {
     var checked by remember { mutableStateOf(true) }
     var showDialog by remember { mutableStateOf(false) }
     val pagerState = rememberPagerState(pageCount = {
@@ -132,18 +137,17 @@ fun HomePage(modifier: Modifier, user: User?, pages: Array<PixelPage>, onClick: 
         ) { page ->
             when (pages[page]) {
                 PixelPage.PHOTO_PAGE -> {
-                    PhotoScreen(onClickPhoto = {
-
-                    },
-                        onClickPhotographer = {
-
+                    PhotoScreen(
+                        onClickPhoto = { it ->
+                            navigateHome(1, it)
+                        },
+                        onClickPhotographer = { it ->
+                            navigateHome(2, it)
                         })
                 }
 
                 PixelPage.CHALLENGE_PAGE -> {
-                    FollowScreen(onClick = {
-
-                    })
+                    FollowScreen(navigateHome = navigateHome)
                 }
 
                 PixelPage.ADD_PAGE -> {
@@ -151,13 +155,11 @@ fun HomePage(modifier: Modifier, user: User?, pages: Array<PixelPage>, onClick: 
                 }
 
                 PixelPage.SEARCH_PAGE -> {
-                    CollectionScreen(onClickCollection = {
-
-                    })
+                    CollectionScreen(navigateHome = navigateHome)
                 }
 
                 PixelPage.SETTINGS_PAGE -> {
-                    SettingsScreen { }
+                    SettingsScreen(navigateHome = navigateHome)
                 }
             }
         }

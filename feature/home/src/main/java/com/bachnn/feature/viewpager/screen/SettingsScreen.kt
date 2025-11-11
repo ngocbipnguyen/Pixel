@@ -71,7 +71,7 @@ enum class SettingsPage(
 @Composable
 fun SettingsScreen(
     viewModel: SettingsViewModel = hiltViewModel(),
-    onClick: () -> Unit,
+    navigateHome: (Int, Any) -> Unit
 ) {
 
     val scaffoldState = rememberBottomSheetScaffoldState()
@@ -80,7 +80,7 @@ fun SettingsScreen(
         topBar = {
             TopAppBar(
                 title = { }, actions = {
-                    IconButton(onClick = { /* setting */ }) {
+                    IconButton(onClick = { navigateHome(9,"Settings")}) {
                         Icon(Icons.Default.Settings, contentDescription = "Share")
                     }
                 })
@@ -139,15 +139,15 @@ fun SettingsScreen(
                 ) { page ->
                     when (pages[page]) {
                         SettingsPage.PHOTO -> {
-                            ContentScreen()
+                            ContentScreen(navigateHome = navigateHome)
                         }
 
                         SettingsPage.MARK -> {
-                            MarkScreen()
+                            MarkScreen(navigateHome = navigateHome)
                         }
 
                         SettingsPage.INFO -> {
-                            InfoScreen()
+                            InfoScreen(navigateHome = navigateHome)
                         }
                     }
 

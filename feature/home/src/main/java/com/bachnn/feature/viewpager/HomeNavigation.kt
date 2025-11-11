@@ -26,13 +26,13 @@ fun NavController.navigateToHome(user: User?, navOptions: NavOptionsBuilder.() -
 }
 
 fun NavGraphBuilder.homeBuild(
-    onClick: () -> Unit,
+    navigateHome: (Int, Any) -> Unit,
 ) {
     composable<HomeRoute> { user ->
         val route = user.toRoute<HomeRoute>()
         val user = route.user?.let {
             Json.decodeFromString<User>(URLDecoder.decode(it, "UTF-8"))
         }
-        HomeScreen(user = user,onClick = onClick)
+        HomeScreen(user = user,navigateHome = navigateHome)
     }
 }

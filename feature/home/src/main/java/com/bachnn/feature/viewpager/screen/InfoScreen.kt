@@ -3,6 +3,7 @@ package com.bachnn.feature.viewpager.screen
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -45,7 +46,8 @@ import com.bachnn.feature.viewpager.viewmodel.SettingsViewModel
 @Composable
 fun InfoScreen(
     viewModel: InfoViewModel = hiltViewModel(),
-    settingsViewModel: SettingsViewModel = hiltViewModel()
+    settingsViewModel: SettingsViewModel = hiltViewModel(),
+    navigateHome: (Int, Any) -> Unit
 ) {
     InfoPage(
         modifier = Modifier
@@ -57,12 +59,18 @@ fun InfoScreen(
                 shape = MaterialTheme.shapes.medium
             ),
         viewModel = viewModel,
-        settingsViewModel = settingsViewModel
+        settingsViewModel = settingsViewModel,
+        navigateHome
     )
 }
 
 @Composable
-fun InfoPage(modifier: Modifier, viewModel: InfoViewModel, settingsViewModel: SettingsViewModel) {
+fun InfoPage(
+    modifier: Modifier,
+    viewModel: InfoViewModel,
+    settingsViewModel: SettingsViewModel,
+    navigateHome: (Int, Any) -> Unit
+) {
 
 
     Box(
@@ -126,7 +134,10 @@ fun InfoPage(modifier: Modifier, viewModel: InfoViewModel, settingsViewModel: Se
                                 LeaderItem(
                                     modifier = Modifier
                                         .padding(8.dp)
-                                        .fillMaxWidth(),
+                                        .fillMaxWidth()
+                                        .clickable {
+                                            navigateHome(13, photographer)
+                                        },
                                     photographer,
                                     index.toString()
                                 )

@@ -31,8 +31,8 @@ import com.bachnn.feature.collection.ShowPhotoCollection
 
 @Composable
 fun CollectionScreen(
-    onClickCollection: (Collection) -> Unit,
-    viewModel: CollectionViewModel = hiltViewModel()
+    viewModel: CollectionViewModel = hiltViewModel(),
+    navigateHome: (Int, Any) -> Unit
 ) {
     Scaffold(
         topBar = { CollectionTopBar(Modifier) }
@@ -42,7 +42,7 @@ fun CollectionScreen(
                 CollectionPagerScreen(
                     Modifier.padding(top = contentPadding.calculateTopPadding()),
                     (viewModel.collectionUiState as CollectionUiState.Success).collection,
-                    onClickCollection
+                    navigateHome
                 )
             }
 
@@ -71,7 +71,7 @@ fun CollectionTopBar(modifier: Modifier) {
 fun CollectionPagerScreen(
     modifier: Modifier,
     collections: List<Collection>,
-    onClickCollection: (Collection) -> Unit
+    navigateHome: (Int, Any) -> Unit
 ) {
     LazyVerticalStaggeredGrid(
         columns = StaggeredGridCells.Fixed(1),
@@ -80,7 +80,7 @@ fun CollectionPagerScreen(
         content = {
             items(collections, key = { it.id }) { it ->
                 if (it.medias.isNotEmpty()) {
-                    CollectionItem(it, Modifier, onClickCollection)
+                    CollectionItem(it, Modifier, navigateHome)
                 }
             }
         }
@@ -91,13 +91,13 @@ fun CollectionPagerScreen(
 fun CollectionItem(
     collection: Collection,
     modifier: Modifier,
-    onClickCollection: (Collection) -> Unit
+    navigateHome: (Int, Any) -> Unit
 ) {
     Column(
         modifier = modifier
             .padding(top = 12.dp, bottom = 16.dp)
             .clickable {
-                onClickCollection(collection)
+                navigateHome(8,collection)
             },
     ) {
         Column(
