@@ -4,7 +4,7 @@ import com.bachnn.core.network.NetworkDataSource
 import com.bachnn.core.network.model.Collection
 import com.bachnn.core.network.model.MeetUpNet
 import com.bachnn.core.network.model.NetworkChangeList
-import com.bachnn.core.network.model.PhotographerEntity
+import com.bachnn.core.network.model.PhotographerNetwork
 import com.bachnn.core.network.model.PixelsPhoto
 import com.bachnn.core.network.remote.ApiInterfaceLocal
 import javax.inject.Inject
@@ -37,11 +37,11 @@ class NetworkRetrofit @Inject constructor(val apiInterfaceLocal: ApiInterfaceLoc
         TODO("Not yet implemented")
     }
 
-    override suspend fun getPhotographers(): List<PhotographerEntity> {
+    override suspend fun getPhotographers(): List<PhotographerNetwork> {
         return apiInterfaceLocal.getPhotographers()
     }
 
-    override suspend fun getPhotographer(id: String): PhotographerEntity? {
+    override suspend fun getPhotographer(id: String): PhotographerNetwork? {
         return apiInterfaceLocal.getPhotographers().find { it.id == id }
     }
 

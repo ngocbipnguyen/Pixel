@@ -12,6 +12,7 @@ import com.bachnn.feature.collection.navigation.collectionBuild
 import com.bachnn.feature.viewpager.homeBuild
 import com.bachnn.feature.viewpager.navigateToHome
 import com.bachnn.feature.viewpager.navigation.buildPhotoDetail
+import com.bachnn.feature.viewpager.navigation.buildPhotographer
 import com.bachnn.feature.viewpager.navigation.navigateToPhotoDetail
 import com.bachnn.feature.viewpager.navigation.navigateToPhotographer
 
@@ -131,6 +132,8 @@ fun NavAppHost(navHostController: NavHostController) {
         }
 
         buildPhotoDetail()
+
+        buildPhotographer()
 
         collectionBuild(
             onCollectionClick = {

@@ -24,6 +24,8 @@ fun NavGraphBuilder.collectionBuild(
     collectionDestination: NavGraphBuilder.() -> Unit
 ) {
     composable<CollectionRoute> {
-        CollectionScreen(onCollectionClick)
+        CollectionScreen(navigateHome = { action , it ->
+
+        })
     }
 }

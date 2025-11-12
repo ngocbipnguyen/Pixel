@@ -13,12 +13,10 @@ import com.bachnn.data.model.PixelsPhoto
 
 @Composable
 fun PhotographerScreen(photographer: Photographer) {
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(color = MaterialTheme.colorScheme.error),
-        contentAlignment = Alignment.Center
-    ) {
-        Text(photographer.id.toString())
-    }
+
+}
+
+@Composable
+fun PhotographerPage() {
+
 }

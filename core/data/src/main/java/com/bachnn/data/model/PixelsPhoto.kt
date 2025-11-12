@@ -40,7 +40,7 @@ fun PixelsPhoto.asExternalNetworkToEntityModel() = PixelsPhotoEntity(
     isFollow = false
 )
 
-fun PixelsPhotoEntity.asExternalEntityToDataModel() = com.bachnn.data.model.PixelsPhoto(
+fun PixelsPhotoEntity.asExternalNetworkToDataModel() = com.bachnn.data.model.PixelsPhoto(
     id = id,
     idCollection = idCollection,
     type = type,
@@ -51,7 +51,7 @@ fun PixelsPhotoEntity.asExternalEntityToDataModel() = com.bachnn.data.model.Pixe
     width = width,
     height = height,
     avgColor = avgColor,
-    src = src.asExternalEntityToDataModel(),
+    src = src.asExternalNetworkToDataModel(),
     timestamps = timestamps,
     isFavorite = isFavorite,
     isFollow = isFollow

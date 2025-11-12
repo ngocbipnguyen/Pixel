@@ -16,7 +16,7 @@ data class Collection(
     val photosCount: Int,
     @SerializedName("videos_count")
     val videosCount: Int,
-    val medias: List<PhotoSrc>,
+    val medias: List<PhotoSrcNetwork>,
     @SerializedName("timestamp")
     val timestamps: Long
 )

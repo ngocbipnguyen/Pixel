@@ -4,6 +4,8 @@ plugins {
     alias(libs.plugins.hilt)
     alias(libs.plugins.ksp)
     id("org.jetbrains.kotlin.kapt")
+    alias(libs.plugins.kotlin.serialization)
+
 }
 
 android {
@@ -51,6 +53,7 @@ dependencies {
     // hilt
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
+    implementation(libs.kotlinx.serialization.json)
 
 
     androidTestImplementation(libs.kotlinx.coroutines.test)

@@ -2,10 +2,12 @@ package com.bachnn.core.database.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import kotlinx.serialization.Serializable
 
 @Entity(
     tableName = "photo_src",
 )
+@Serializable
 data class PhotoSrcEntity(
     @PrimaryKey
     val original: String,

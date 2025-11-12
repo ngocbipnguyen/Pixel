@@ -4,10 +4,8 @@ import com.bachnn.core.database.local.dao.CollectionDao
 import com.bachnn.core.database.model.CollectionWithPhotos
 import com.bachnn.core.network.retrofit.NetworkRetrofit
 import com.bachnn.data.model.Collection
-import com.bachnn.data.model.asExternalEntityToDataModel
 import com.bachnn.data.model.asExternalNetworkToDataModel
 import com.bachnn.data.model.asExternalNetworkToEntityModel
-import com.bachnn.data.model.asExternalToNetworkModel
 import javax.inject.Inject
 
 class FirstCollectionRepository @Inject constructor(
@@ -21,7 +19,7 @@ class FirstCollectionRepository @Inject constructor(
         }
         val networkCollection = getCollectionsByTimestamps(localTimestamp)
         val collections = collectionDao.getCollections().map { it ->
-            it.asExternalEntityToDataModel()
+            it.asExternalNetworkToDataModel()
         }
 
        networkCollection.forEachIndexed { index, collection ->
@@ -48,7 +46,7 @@ class FirstCollectionRepository @Inject constructor(
     }
 
     override suspend fun getCollection(id: String): Collection {
-        return collectionDao.getCollectionById(id).asExternalEntityToDataModel()
+        return collectionDao.getCollectionById(id).asExternalNetworkToDataModel()
     }
 
     override suspend fun getCollections(id: String): CollectionWithPhotos? {

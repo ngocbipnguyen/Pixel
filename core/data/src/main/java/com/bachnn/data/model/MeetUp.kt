@@ -10,7 +10,7 @@ data class MeetUp(
     val description: String
 )
 
-fun MeetUpNet.asExternalEntityToDataModel() = MeetUp(
+fun MeetUpNet.asExternalNetworkToDataModel() = MeetUp(
     id = id,
     url = url,
     time = time,

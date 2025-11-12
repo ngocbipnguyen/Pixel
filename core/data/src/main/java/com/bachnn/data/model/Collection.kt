@@ -43,7 +43,7 @@ fun Collection.asExternalToNetworkModel(): Collection {
     )
 }
 
-fun CollectionEntity.asExternalEntityToDataModel(): com.bachnn.data.model.Collection {
+fun CollectionEntity.asExternalNetworkToDataModel(): com.bachnn.data.model.Collection {
     return com.bachnn.data.model.Collection(
         id = id,
         title = title,

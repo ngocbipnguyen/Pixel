@@ -3,7 +3,7 @@ package com.bachnn.core.network
 import com.bachnn.core.network.model.Collection
 import com.bachnn.core.network.model.MeetUpNet
 import com.bachnn.core.network.model.NetworkChangeList
-import com.bachnn.core.network.model.PhotographerEntity
+import com.bachnn.core.network.model.PhotographerNetwork
 import com.bachnn.core.network.model.PixelsPhoto
 
 interface NetworkDataSource {
@@ -20,9 +20,9 @@ interface NetworkDataSource {
 
     suspend fun getCollectionChangeList(after: Int? = null): List<NetworkChangeList>
 
-    suspend fun getPhotographers(): List<PhotographerEntity>
+    suspend fun getPhotographers(): List<PhotographerNetwork>
 
-    suspend fun getPhotographer(id: String): PhotographerEntity?
+    suspend fun getPhotographer(id: String): PhotographerNetwork?
 
     suspend fun getMeetups(): List<MeetUpNet>
 

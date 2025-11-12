@@ -4,7 +4,7 @@ import com.bachnn.core.database.local.dao.CollectionDao
 import com.bachnn.core.database.local.dao.PhotoDao
 import com.bachnn.core.network.retrofit.NetworkRetrofit
 import com.bachnn.data.model.PixelsPhoto
-import com.bachnn.data.model.asExternalEntityToDataModel
+import com.bachnn.data.model.asExternalNetworkToDataModel
 import com.bachnn.data.model.asExternalNetworkToEntityModel
 import javax.inject.Inject
 
@@ -19,11 +19,11 @@ class FirstPixelRepository @Inject constructor(
             localTimestamp = 0
         }
         getPhotosByTimestamps(localTimestamp)
-        return pixelDao.getPixelPhotos().map { it -> it.asExternalEntityToDataModel() }
+        return pixelDao.getPixelPhotos().map { it -> it.asExternalNetworkToDataModel() }
     }
 
     override suspend fun getPhotosByIdCollection(idCollection: String): List<PixelsPhoto>? {
-        return collectionDao.getCollectionWithPhotos(idCollection)?.photos?.map { it -> it.asExternalEntityToDataModel() }
+        return collectionDao.getCollectionWithPhotos(idCollection)?.photos?.map { it -> it.asExternalNetworkToDataModel() }
     }
 
 
@@ -37,7 +37,7 @@ class FirstPixelRepository @Inject constructor(
     }
 
     override suspend fun getPhoto(id: Int): PixelsPhoto {
-        return pixelDao.getPixelPhotoById(id).asExternalEntityToDataModel()
+        return pixelDao.getPixelPhotoById(id).asExternalNetworkToDataModel()
     }
 
     override suspend fun updateFavorite(id: Long, isFavorite: Boolean) {

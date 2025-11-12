@@ -19,13 +19,13 @@ data class PixelsPhoto(
     val height: Int,
     @SerializedName("avg_color")
     val avgColor: String,
-    val src: PhotoSrc,
+    val src: PhotoSrcNetwork,
     @SerializedName("timestamp")
     val timestamps: Long
 )
 
 @Serializable
-data class PhotoSrc(
+data class PhotoSrcNetwork(
     val original: String,
     val large2x: String,
     val large: String,
