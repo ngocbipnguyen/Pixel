@@ -211,7 +211,10 @@ fun ItemPhoto(
                     .weight(1f)
                     .padding(
                         start = 8.dp, bottom = 8.dp, end = 8.dp
-                    ),
+                    )
+                    .clickable {
+                        onClickPhotographer(photo.photographerId)
+                    },
                 style = MaterialTheme.typography.titleLarge
             )
 

@@ -349,7 +349,7 @@ fun ItemLeaderBroadCircle(
                     .height(160.dp)
                     .align(alignment = Alignment.CenterHorizontally)
                     .clickable {
-                        navigateHome(5, item)
+                        navigateHome(5, item.id)
                     }
             ) {
                 GlideImage(

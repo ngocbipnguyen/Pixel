@@ -136,7 +136,7 @@ fun InfoPage(
                                         .padding(8.dp)
                                         .fillMaxWidth()
                                         .clickable {
-                                            navigateHome(13, photographer)
+                                            navigateHome(13, photographer.id)
                                         },
                                     photographer,
                                     index.toString()

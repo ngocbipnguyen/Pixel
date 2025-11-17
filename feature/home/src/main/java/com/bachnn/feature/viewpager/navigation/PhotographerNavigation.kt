@@ -1,5 +1,7 @@
 package com.bachnn.feature.viewpager.navigation
 
+import androidx.compose.runtime.key
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
@@ -9,6 +11,7 @@ import androidx.navigation.toRoute
 import com.bachnn.data.model.Photographer
 import com.bachnn.data.model.PixelsPhoto
 import com.bachnn.feature.viewpager.screen.PhotographerScreen
+import com.bachnn.feature.viewpager.viewmodel.PhotographerViewModel
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 
@@ -17,11 +20,11 @@ import kotlinx.serialization.json.Json
 data class PhotographerRoute(val photographerSrc: String)
 
 fun NavController.navigateToPhotographer(
-    photographer: Photographer,
+    photographer: Long,
     navOptions: NavOptionsBuilder.() -> Unit = {}
 ) {
-    val json = Json.encodeToString(photographer)
-    navigate(route = PhotoDetailRoute(json)) {
+    val json = photographer.toString()
+    navigate(route = PhotographerRoute(json)) {
         navOptions()
     }
 }
@@ -29,9 +32,14 @@ fun NavController.navigateToPhotographer(
 
 fun NavGraphBuilder.buildPhotographer() {
     composable<PhotographerRoute> { backStackEntry ->
-        val photographer: Photographer =
-            Json.decodeFromString<Photographer>(backStackEntry.toRoute<PhotoDetailRoute>().pixelsPhotoSrc)
-//        PhotoDetailScreen(photographer)
-        PhotographerScreen(photographer)
+        val photographer: String = backStackEntry.toRoute<PhotographerRoute>().photographerSrc
+        val viewModel: PhotographerViewModel =
+            hiltViewModel<PhotographerViewModel, PhotographerViewModel.Factory>(
+                key = photographer
+            ) { factory ->
+                factory.create(photographer)
+
+            }
+        PhotographerScreen(photographer, viewModel = viewModel)
     }
 }

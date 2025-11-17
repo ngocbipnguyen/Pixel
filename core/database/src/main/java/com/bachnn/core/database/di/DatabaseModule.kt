@@ -22,6 +22,7 @@ class DatabaseModule {
     @Singleton
     fun provideDatabase(@ApplicationContext context: Context): AppDatabase {
         return Room.databaseBuilder(context,AppDatabase::class.java, "collection_db")
+            .fallbackToDestructiveMigration(false)
             .allowMainThreadQueries().build()
     }
 

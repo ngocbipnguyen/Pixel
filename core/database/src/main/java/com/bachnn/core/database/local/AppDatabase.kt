@@ -21,7 +21,7 @@ import com.bachnn.core.database.model.UserEntity
 
 @Database(
     entities = [CollectionEntity::class, PixelsPhotoEntity::class, UserEntity::class, AlbumEntity::class, PhotographerEntity::class, SocialMediaEntity::class],
-    version = 1,
+    version = 2,
     exportSchema = false
 )
 @TypeConverters(

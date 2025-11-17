@@ -68,9 +68,9 @@ fun NavAppHost(navHostController: NavHostController) {
 
                 2 -> {
                     //todo PhotographerScreen
-                    if (data is Photographer) {
-                        navHostController.navigateToPhotographer(data)
-                    }
+//                    if (data is Photographer) {
+                        navHostController.navigateToPhotographer(data as Long)
+//                    }
                 }
 
                 3 -> {
@@ -85,10 +85,8 @@ fun NavAppHost(navHostController: NavHostController) {
                 }
 
                 5 -> {
-                    //todo PhotographerScreen
-                    if (data is Photographer) {
-                        navHostController.navigateToPhotographer(data)
-                    }
+                    //todo PhotographerScreen do : update data later
+                    navHostController.navigateToPhotographer(123456)
                 }
 
                 6 -> { //todo Follow Action
@@ -122,8 +120,8 @@ fun NavAppHost(navHostController: NavHostController) {
 
                 }
 
-                13 -> { //todo PhotographerScreen
-
+                13 -> { //todo PhotographerScreen do : update data later
+                    navHostController.navigateToPhotographer(123456)
                 }
 
             }
