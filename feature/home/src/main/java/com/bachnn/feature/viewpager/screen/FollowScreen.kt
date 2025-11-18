@@ -54,6 +54,11 @@ import com.bachnn.data.model.Collection
 import com.bachnn.data.model.MeetUp
 import com.bachnn.data.model.PhotoSrc
 import com.bachnn.data.model.Photographer
+import com.bachnn.feature.collection.CHALLENGE_ACTION
+import com.bachnn.feature.collection.COLLECTION_DETAIL
+import com.bachnn.feature.collection.FOLLOW_ACTION
+import com.bachnn.feature.collection.MEETUP
+import com.bachnn.feature.collection.PHOTOGRAPHER
 import com.bachnn.feature.collection.screen.PagerError
 import com.bachnn.feature.collection.screen.PagerLoading
 import com.bachnn.feature.collection.view.CircleNetworkImage
@@ -186,7 +191,7 @@ fun ItemChallenge(modifier: Modifier, item: Collection, navigateHome: (Int, Any)
                 .align(alignment = Alignment.CenterHorizontally)
                 .height(260.dp)
                 .clickable {
-                    navigateHome(3, item)
+                    navigateHome(COLLECTION_DETAIL, item)
                 }
             , items = item.medias
         )
@@ -226,7 +231,7 @@ fun ItemChallenge(modifier: Modifier, item: Collection, navigateHome: (Int, Any)
 
         Button(
             onClick = {
-                navigateHome(4, "Join Challenge")
+                navigateHome(CHALLENGE_ACTION, "Join Challenge")
             },
             modifier = Modifier
                 .width(screenWidthDp * 0.95f)
@@ -350,7 +355,7 @@ fun ItemLeaderBroadCircle(
                     .height(160.dp)
                     .align(alignment = Alignment.CenterHorizontally)
                     .clickable {
-                        navigateHome(5, item.id)
+                        navigateHome(PHOTOGRAPHER, item.id)
                     }
             ) {
                 GlideImage(
@@ -379,7 +384,7 @@ fun ItemLeaderBroadCircle(
                             )
                         )
                         .clickable {
-                            navigateHome(5, item)
+                            navigateHome(PHOTOGRAPHER, item)
                         }, // Add clipping for better UI
                     contentScale = ContentScale.Crop,
                 )
@@ -398,7 +403,7 @@ fun ItemLeaderBroadCircle(
             )
             OutlinedButton(
                 onClick = {
-                    navigateHome(6, "Follow")
+                    navigateHome(FOLLOW_ACTION, "Follow")
                 },
                 modifier = Modifier
                     .offset(y = (-12).dp)
@@ -456,7 +461,7 @@ fun ItemMeetup(
         modifier = modifier
             .width(screenWidthDp)
             .padding(start = 4.dp, end = 4.dp).clickable{
-                navigateHome(7,item)
+                navigateHome(MEETUP,item)
             }
     ) {
         GlideImage(

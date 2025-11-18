@@ -24,6 +24,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.bachnn.data.model.Collection
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.bachnn.feature.collection.COLLECTION_DETAIL
 import com.bachnn.feature.collection.viewmodel.CollectionUiState
 import com.bachnn.feature.collection.viewmodel.CollectionViewModel
 import com.bachnn.feature.collection.R
@@ -97,7 +98,7 @@ fun CollectionItem(
         modifier = modifier
             .padding(top = 12.dp, bottom = 16.dp)
             .clickable {
-                navigateHome(8,collection)
+                navigateHome(COLLECTION_DETAIL,collection)
             },
     ) {
         Column(

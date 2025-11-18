@@ -53,6 +53,8 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.bachnn.data.model.User
+import com.bachnn.feature.collection.PHOTOGRAPHER
+import com.bachnn.feature.collection.PHOTO_DETAIL
 import com.bachnn.feature.collection.screen.CollectionScreen
 import com.bachnn.feature.collection.screen.PhotoScreen
 import com.bachnn.feature.collection.viewmodel.PhotoViewModel
@@ -144,10 +146,10 @@ fun HomePage(
                     }
                     PhotoScreen(
                         onClickPhoto = { it ->
-                            navigateHome(1, it)
+                            navigateHome(PHOTO_DETAIL, it)
                         },
                         onClickPhotographer = { it ->
-                            navigateHome(2, it)
+                            navigateHome(PHOTOGRAPHER, it)
                         }, onBack = {}, viewModel = viewModel)
                 }
 

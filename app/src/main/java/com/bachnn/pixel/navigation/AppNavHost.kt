@@ -8,6 +8,16 @@ import com.bachnn.data.model.Collection
 import com.bachnn.data.model.MeetUp
 import com.bachnn.data.model.Photographer
 import com.bachnn.data.model.PixelsPhoto
+import com.bachnn.feature.collection.CHALLENGE_ACTION
+import com.bachnn.feature.collection.COLLECTION_DETAIL
+import com.bachnn.feature.collection.DOWNLOAD_ACTION
+import com.bachnn.feature.collection.FAVORITE_ACTION
+import com.bachnn.feature.collection.FOLLOW_ACTION
+import com.bachnn.feature.collection.INSPIRED_ACTION
+import com.bachnn.feature.collection.MEETUP
+import com.bachnn.feature.collection.PHOTOGRAPHER
+import com.bachnn.feature.collection.PHOTO_DETAIL
+import com.bachnn.feature.collection.SETTINGS
 import com.bachnn.feature.collection.navigation.collectionBuild
 import com.bachnn.feature.viewpager.homeBuild
 import com.bachnn.feature.viewpager.navigateToHome
@@ -65,67 +75,74 @@ fun NavAppHost(navHostController: NavHostController) {
 
         homeBuild { action, data ->
             when (action) {
-                1 -> {
+                PHOTO_DETAIL -> {
                     if (data is PixelsPhoto) {
                         navHostController.navigateToPhotoDetail(data)
                     }
                 }
 
-                2 -> {
-                    navHostController.navigateToPhotographer(data as Long)
+                PHOTOGRAPHER -> {
+
+                    val photographerId: Long = if (data is String) {
+                         data.toLong()
+                    } else  {
+                        data as Long
+                    }
+
+                    navHostController.navigateToPhotographer(photographerId)
                 }
 
-                3 -> {
+                COLLECTION_DETAIL -> {
                     if (data is Collection) {
                         // create a collection detail screen
                         navHostController.navigateCollectionDetail(data.id, data.title)
                     }
                 }
 
-                4 -> {
+                CHALLENGE_ACTION -> {
                     //todo Join Challenge Action
                 }
 
-                5 -> {
-                    navHostController.navigateToPhotographer(123456)
+//                PHOTOGRAPHER -> {
+//                    navHostController.navigateToPhotographer(123456)
+//                }
+
+                FOLLOW_ACTION -> { //todo Follow Action
+
                 }
 
-                6 -> { //todo Follow Action
-
-                }
-
-                7 -> {
+                MEETUP -> {
                     if (data is MeetUp) {
                         navHostController.navigateToMeetup(data)
                     }
                 }
 
-                8 -> {
-                    if (data is Collection) {
-                        navHostController.navigateCollectionDetail(data.id, data.title)
-                    }
-                }
+//                COLLECTION_DETAIL -> {
+//                    if (data is Collection) {
+//                        navHostController.navigateCollectionDetail(data.id, data.title)
+//                    }
+//                }
 
 
-                9 -> {
+                SETTINGS -> {
                     navHostController.navigateToSettings(data as String)
                 }
 
-                10 -> { //todo Get Inspired Action
+                INSPIRED_ACTION -> { //todo Get Inspired Action
 
                 }
 
-                11 -> { //todo Favorite Action
+                FAVORITE_ACTION -> { //todo Favorite Action
 
                 }
 
-                12 -> { //todo Download Action
+                DOWNLOAD_ACTION -> { //todo Download Action
 
                 }
 
-                13 -> {
-                    navHostController.navigateToPhotographer(123456)
-                }
+//                PHOTOGRAPHER -> {
+//                    navHostController.navigateToPhotographer(123456)
+//                }
 
             }
 

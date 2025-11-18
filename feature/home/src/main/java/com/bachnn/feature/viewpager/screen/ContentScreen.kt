@@ -19,6 +19,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.bachnn.feature.collection.INSPIRED_ACTION
 import com.bachnn.feature.viewpager.R
 
 
@@ -51,7 +52,7 @@ fun ContentPage(modifier: Modifier = Modifier, navigateHome: (Int, Any) -> Unit)
         Spacer(Modifier.height(16.dp))
 
         Button(
-            onClick = {navigateHome(10, "Get Inspired")},
+            onClick = {navigateHome(INSPIRED_ACTION, "Get Inspired")},
             modifier = Modifier.width(200.dp),
             shape = MaterialTheme.shapes.medium,
             colors = ButtonDefaults.buttonColors(

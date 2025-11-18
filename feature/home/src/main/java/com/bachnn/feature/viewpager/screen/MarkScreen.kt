@@ -19,6 +19,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.bachnn.feature.collection.DOWNLOAD_ACTION
+import com.bachnn.feature.collection.FAVORITE_ACTION
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 
@@ -45,14 +47,14 @@ fun MarkPage(modifier: Modifier, navigateHome: (Int, Any) -> Unit) {
                 url = "https://images.pexels.com/photos/33162053/pexels-photo-33162053.jpeg?auto=compress&cs=tinysrgb&h=350",
                 name = "Favorite"
             ) {
-                navigateHome(11, "Favorite")
+                navigateHome(FAVORITE_ACTION, "Favorite")
             }
             ItemMark(
                 modifier = Modifier.weight(1f).align(alignment = Alignment.CenterVertically),
                 url = "https://images.pexels.com/photos/33123695/pexels-photo-33123695.jpeg?auto=compress&cs=tinysrgb&h=350",
                 name = "Download"
             ) {
-                navigateHome(12, "Download")
+                navigateHome(DOWNLOAD_ACTION, "Download")
             }
         }
 

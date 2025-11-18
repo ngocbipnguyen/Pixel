@@ -33,6 +33,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.bachnn.data.model.LeaderCategory
 import com.bachnn.data.model.Photographer
 import com.bachnn.data.model.User
+import com.bachnn.feature.collection.PHOTOGRAPHER
 import com.bachnn.feature.collection.screen.PagerLoading
 import com.bachnn.feature.collection.view.CircleNetworkImage
 import com.bachnn.feature.viewpager.R
@@ -136,7 +137,7 @@ fun InfoPage(
                                         .padding(8.dp)
                                         .fillMaxWidth()
                                         .clickable {
-                                            navigateHome(13, photographer.id)
+                                            navigateHome(PHOTOGRAPHER, photographer.id)
                                         },
                                     photographer,
                                     index.toString()

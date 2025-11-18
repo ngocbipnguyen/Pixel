@@ -48,6 +48,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.bachnn.data.model.User
+import com.bachnn.feature.collection.SETTINGS
 import com.bachnn.feature.collection.screen.PagerError
 import com.bachnn.feature.collection.screen.PagerLoading
 import com.bachnn.feature.collection.view.CircleNetworkImage
@@ -84,9 +85,9 @@ fun SettingsScreen(
                 title = { }, actions = {
                     IconButton(onClick = {
                         if (user != null) {
-                            navigateHome(9, user!!.uid)
+                            navigateHome(SETTINGS, user!!.uid)
                         } else {
-                            navigateHome(9, "")
+                            navigateHome(SETTINGS, "")
                         }
                     }) {
                         Icon(Icons.Default.Settings, contentDescription = "Share")
