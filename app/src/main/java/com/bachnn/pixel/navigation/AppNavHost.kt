@@ -11,8 +11,10 @@ import com.bachnn.data.model.PixelsPhoto
 import com.bachnn.feature.collection.navigation.collectionBuild
 import com.bachnn.feature.viewpager.homeBuild
 import com.bachnn.feature.viewpager.navigateToHome
+import com.bachnn.feature.viewpager.navigation.buildCollectionDetail
 import com.bachnn.feature.viewpager.navigation.buildPhotoDetail
 import com.bachnn.feature.viewpager.navigation.buildPhotographer
+import com.bachnn.feature.viewpager.navigation.navigateCollectionDetail
 import com.bachnn.feature.viewpager.navigation.navigateToPhotoDetail
 import com.bachnn.feature.viewpager.navigation.navigateToPhotographer
 
@@ -69,7 +71,7 @@ fun NavAppHost(navHostController: NavHostController) {
                 2 -> {
                     //todo PhotographerScreen
 //                    if (data is Photographer) {
-                        navHostController.navigateToPhotographer(data as Long)
+                    navHostController.navigateToPhotographer(data as Long)
 //                    }
                 }
 
@@ -77,6 +79,7 @@ fun NavAppHost(navHostController: NavHostController) {
                     //todo CollectionScreen
                     if (data is Collection) {
                         // create a collection detail screen
+                        navHostController.navigateCollectionDetail(data.id, data.title)
                     }
                 }
 
@@ -101,6 +104,10 @@ fun NavAppHost(navHostController: NavHostController) {
 
                 8 -> { // todo PhotoScreen
                     //
+                    if (data is Collection) {
+                        navHostController.navigateCollectionDetail(data.id, data.title)
+                    }
+
                 }
 
 
@@ -132,6 +139,8 @@ fun NavAppHost(navHostController: NavHostController) {
         buildPhotoDetail()
 
         buildPhotographer()
+
+        buildCollectionDetail(navHostController)
 
         collectionBuild(
             onCollectionClick = {

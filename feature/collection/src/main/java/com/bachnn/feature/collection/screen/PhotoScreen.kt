@@ -21,6 +21,7 @@ import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.foundation.lazy.staggeredgrid.rememberLazyStaggeredGridState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.MoreVert
@@ -74,7 +75,10 @@ import com.bumptech.glide.integration.compose.GlideImage
 fun PhotoScreen(
     onClickPhoto: (PixelsPhoto) -> Unit,
     onClickPhotographer: (Long) -> Unit,
-    viewModel: PhotoViewModel = hiltViewModel()
+    viewModel: PhotoViewModel = hiltViewModel(),
+    onBack: () -> Unit,
+    collectionId: String = "",
+    nameCollection: String = ""
 ) {
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
 
@@ -83,13 +87,34 @@ fun PhotoScreen(
         modifier = Modifier.fillMaxWidth(), topBar = {
             TopAppBar(
                 title = {
-                    Text(
-                        "Pixel", style = MaterialTheme.typography.headlineMedium
-                    )
+                    if (collectionId != "") {
+                        Text(
+                            nameCollection, style = MaterialTheme.typography.headlineMedium
+                        )
+                    } else {
+                        Text(
+                            "Pixel", style = MaterialTheme.typography.headlineMedium
+                        )
+                    }
+
                 },
                 actions = {
-                    IconButton(onClick = { /* setting */ }) {
-                        Icon(Icons.Default.Share, contentDescription = "Share")
+                    if (collectionId != "") {
+                        IconButton(onClick = { /* setting */ }) {
+                            Icon(Icons.Default.Send, contentDescription = "Send")
+                        }
+
+                    } else {
+                        IconButton(onClick = { /* setting */ }) {
+                            Icon(Icons.Default.Share, contentDescription = "Share")
+                        }
+                    }
+                },
+                navigationIcon = {
+                    if (collectionId != "") {
+                        IconButton(onClick = onBack) {
+                            Icon(Icons.Default.ArrowBack, contentDescription = "Back")
+                        }
                     }
                 },
                 scrollBehavior = scrollBehavior,

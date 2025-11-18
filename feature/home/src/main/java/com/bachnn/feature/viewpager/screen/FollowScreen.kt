@@ -184,7 +184,11 @@ fun ItemChallenge(modifier: Modifier, item: Collection, navigateHome: (Int, Any)
             modifier = Modifier
                 .width(screenWidthDp * 0.95f)
                 .align(alignment = Alignment.CenterHorizontally)
-                .height(260.dp), items = item.medias
+                .height(260.dp)
+                .clickable {
+                    navigateHome(3, item)
+                }
+            , items = item.medias
         )
         Text(
             item.title,
@@ -196,10 +200,7 @@ fun ItemChallenge(modifier: Modifier, item: Collection, navigateHome: (Int, Any)
             modifier = Modifier
                 .width(screenWidthDp * 0.95f)
                 .align(alignment = Alignment.CenterHorizontally)
-                .padding(top = 12.dp, bottom = 12.dp)
-                .clickable {
-                    navigateHome(3, item)
-                },
+                .padding(top = 12.dp, bottom = 12.dp),
         ) {
             OutlinedButton(
                 onClick = {},

@@ -51,9 +51,11 @@ import androidx.compose.ui.window.Dialog
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.bachnn.data.model.User
 import com.bachnn.feature.collection.screen.CollectionScreen
 import com.bachnn.feature.collection.screen.PhotoScreen
+import com.bachnn.feature.collection.viewmodel.PhotoViewModel
 import com.bachnn.feature.viewpager.R
 import kotlinx.coroutines.launch
 
@@ -137,13 +139,16 @@ fun HomePage(
         ) { page ->
             when (pages[page]) {
                 PixelPage.PHOTO_PAGE -> {
+                    val viewModel = hiltViewModel<PhotoViewModel, PhotoViewModel.Factory>(key ="") { factory ->
+                        factory.create("")
+                    }
                     PhotoScreen(
                         onClickPhoto = { it ->
                             navigateHome(1, it)
                         },
                         onClickPhotographer = { it ->
                             navigateHome(2, it)
-                        })
+                        }, onBack = {}, viewModel = viewModel)
                 }
 
                 PixelPage.CHALLENGE_PAGE -> {

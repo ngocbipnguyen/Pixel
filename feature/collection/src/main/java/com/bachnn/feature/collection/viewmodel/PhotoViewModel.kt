@@ -15,6 +15,9 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import androidx.core.net.toUri
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import java.io.File
 
 sealed interface PixelUiState {
@@ -24,9 +27,18 @@ sealed interface PixelUiState {
 }
 
 
-@HiltViewModel
-class PhotoViewModel @Inject constructor(val firstPixelRepository: FirstPixelRepository) :
+@HiltViewModel(assistedFactory = PhotoViewModel.Factory::class)
+class PhotoViewModel @AssistedInject constructor(
+    val firstPixelRepository: FirstPixelRepository,
+    @Assisted val collectionId: String
+) :
     ViewModel() {
+
+
+    @AssistedFactory
+    interface Factory {
+        fun create(collectionId: String): PhotoViewModel
+    }
 
     var pixelUiState: PixelUiState by mutableStateOf(PixelUiState.Loading)
         private set
@@ -35,8 +47,16 @@ class PhotoViewModel @Inject constructor(val firstPixelRepository: FirstPixelRep
         viewModelScope.launch {
             pixelUiState = PixelUiState.Loading
             try {
-                val photos = firstPixelRepository.getPhotos()
-                pixelUiState = PixelUiState.Success(photos)
+                val photos = if (collectionId != "") {
+                    firstPixelRepository.getPhotosByIdCollection(collectionId)
+                } else {
+                    firstPixelRepository.getPhotos()
+                }
+                pixelUiState = if (photos == null) {
+                    PixelUiState.Error("List Photo is null !")
+                } else {
+                    PixelUiState.Success(photos)
+                }
             } catch (e: Exception) {
                 pixelUiState = PixelUiState.Error(e.message.toString())
             }
@@ -57,10 +77,10 @@ class PhotoViewModel @Inject constructor(val firstPixelRepository: FirstPixelRep
 
     fun download(context: Context, original: String) {
         val pixelFile = File(Environment.DIRECTORY_DOWNLOADS, "pixel")
-        if (!pixelFile.exists())  {
+        if (!pixelFile.exists()) {
             pixelFile.mkdirs()
         }
-        val namePhoto =  original.substringAfterLast('/')
+        val namePhoto = original.substringAfterLast('/')
         val request = DownloadManager.Request(original.toUri())
             .setTitle(namePhoto)
             .setTitle("Downloading image ...")
