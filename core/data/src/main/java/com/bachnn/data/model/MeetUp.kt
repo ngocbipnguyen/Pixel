@@ -1,7 +1,9 @@
 package com.bachnn.data.model
 
 import com.bachnn.core.network.model.MeetUpNet
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class MeetUp(
     val id: String,
     val url: String,

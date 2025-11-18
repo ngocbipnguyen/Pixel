@@ -76,11 +76,19 @@ fun SettingsScreen(
 
     val scaffoldState = rememberBottomSheetScaffoldState()
 
+    var user: User? = null
+
     BottomSheetScaffold(
         topBar = {
             TopAppBar(
                 title = { }, actions = {
-                    IconButton(onClick = { navigateHome(9,"Settings")}) {
+                    IconButton(onClick = {
+                        if (user != null) {
+                            navigateHome(9, user!!.uid)
+                        } else {
+                            navigateHome(9, "")
+                        }
+                    }) {
                         Icon(Icons.Default.Settings, contentDescription = "Share")
                     }
                 })
@@ -158,7 +166,7 @@ fun SettingsScreen(
     ) { innerPadding ->
         when (viewModel.settingsUiState) {
             is SettingsUiState.Success -> {
-                val user = (viewModel.settingsUiState as SettingsUiState.Success).user
+                user = (viewModel.settingsUiState as SettingsUiState.Success).user
                 SettingsPage(
                     modifier = Modifier
                         .padding(top = innerPadding.calculateTopPadding())

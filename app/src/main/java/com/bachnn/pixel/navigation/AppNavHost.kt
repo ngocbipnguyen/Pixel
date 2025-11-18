@@ -12,11 +12,15 @@ import com.bachnn.feature.collection.navigation.collectionBuild
 import com.bachnn.feature.viewpager.homeBuild
 import com.bachnn.feature.viewpager.navigateToHome
 import com.bachnn.feature.viewpager.navigation.buildCollectionDetail
+import com.bachnn.feature.viewpager.navigation.buildMeetup
 import com.bachnn.feature.viewpager.navigation.buildPhotoDetail
 import com.bachnn.feature.viewpager.navigation.buildPhotographer
+import com.bachnn.feature.viewpager.navigation.buildSettings
 import com.bachnn.feature.viewpager.navigation.navigateCollectionDetail
+import com.bachnn.feature.viewpager.navigation.navigateToMeetup
 import com.bachnn.feature.viewpager.navigation.navigateToPhotoDetail
 import com.bachnn.feature.viewpager.navigation.navigateToPhotographer
+import com.bachnn.feature.viewpager.navigation.navigateToSettings
 
 @Composable
 fun NavApp() {
@@ -62,21 +66,16 @@ fun NavAppHost(navHostController: NavHostController) {
         homeBuild { action, data ->
             when (action) {
                 1 -> {
-                    //todo PhotoDetailScreen
                     if (data is PixelsPhoto) {
                         navHostController.navigateToPhotoDetail(data)
                     }
                 }
 
                 2 -> {
-                    //todo PhotographerScreen
-//                    if (data is Photographer) {
                     navHostController.navigateToPhotographer(data as Long)
-//                    }
                 }
 
                 3 -> {
-                    //todo CollectionScreen
                     if (data is Collection) {
                         // create a collection detail screen
                         navHostController.navigateCollectionDetail(data.id, data.title)
@@ -88,7 +87,6 @@ fun NavAppHost(navHostController: NavHostController) {
                 }
 
                 5 -> {
-                    //todo PhotographerScreen do : update data later
                     navHostController.navigateToPhotographer(123456)
                 }
 
@@ -96,23 +94,21 @@ fun NavAppHost(navHostController: NavHostController) {
 
                 }
 
-                7 -> {//todo MeetupScreen
+                7 -> {
                     if (data is MeetUp) {
-                        // create Meetup Screen
+                        navHostController.navigateToMeetup(data)
                     }
                 }
 
-                8 -> { // todo PhotoScreen
-                    //
+                8 -> {
                     if (data is Collection) {
                         navHostController.navigateCollectionDetail(data.id, data.title)
                     }
-
                 }
 
 
-                9 -> { // todo create settings
-
+                9 -> {
+                    navHostController.navigateToSettings(data as String)
                 }
 
                 10 -> { //todo Get Inspired Action
@@ -127,7 +123,7 @@ fun NavAppHost(navHostController: NavHostController) {
 
                 }
 
-                13 -> { //todo PhotographerScreen do : update data later
+                13 -> {
                     navHostController.navigateToPhotographer(123456)
                 }
 
@@ -141,6 +137,10 @@ fun NavAppHost(navHostController: NavHostController) {
         buildPhotographer()
 
         buildCollectionDetail(navHostController)
+
+        buildSettings(navHostController)
+
+        buildMeetup(navHostController)
 
         collectionBuild(
             onCollectionClick = {
