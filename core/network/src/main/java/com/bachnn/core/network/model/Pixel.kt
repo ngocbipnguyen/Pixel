@@ -9,7 +9,7 @@ data class PixelsPhoto(
     @SerializedName("id_collection")
     val idCollection: String,
     val type: String,
-    @SerializedName("photographer_id")
+    @SerializedName("photographer_ids")
     val photographerId: Long,
     val photographer: String,
     @SerializedName("photographer_url")
