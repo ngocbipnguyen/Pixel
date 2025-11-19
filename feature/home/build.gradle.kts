@@ -65,6 +65,7 @@ dependencies {
 
     implementation(libs.glide)
     implementation(libs.constraintlayout)
+    implementation(libs.zoomable.compose )
 
 
 }

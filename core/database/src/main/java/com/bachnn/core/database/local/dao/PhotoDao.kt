@@ -35,6 +35,9 @@ interface PhotoDao {
     @Query("UPDATE pixels_photos SET isFavorite = :isFavorite WHERE id = :id")
     suspend fun updateFavorite(id: Long, isFavorite: Boolean)
 
+    @Query("UPDATE pixels_photos SET isMark = :isMark WHERE id = :id")
+    suspend fun updateMark(id: Long, isMark: Boolean)
+
     @Query("UPDATE pixels_photos SET isFollow = :isFollow WHERE id = :id")
     suspend fun updateFollow(id: Long, isFollow: Boolean)
 

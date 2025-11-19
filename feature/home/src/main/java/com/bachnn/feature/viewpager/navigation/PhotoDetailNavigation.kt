@@ -25,10 +25,10 @@ fun NavController.navigateToPhotoDetail(
     }
 }
 
-fun NavGraphBuilder.buildPhotoDetail() {
+fun NavGraphBuilder.buildPhotoDetail(navController: NavController) {
     composable<PhotoDetailRoute> { backStackEntry ->
         val pixelsPhoto: PixelsPhoto =
             Json.decodeFromString<PixelsPhoto>(backStackEntry.toRoute<PhotoDetailRoute>().pixelsPhotoSrc)
-        PhotoDetailScreen(pixelsPhoto)
+        PhotoDetailScreen(pixelsPhoto, onBackPress = {navController.popBackStack()})
     }
 }

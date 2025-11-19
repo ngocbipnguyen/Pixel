@@ -44,6 +44,10 @@ class FirstPixelRepository @Inject constructor(
         return pixelDao.updateFavorite(id, isFavorite)
     }
 
+    override suspend fun updateMark(id: Long, isMark: Boolean) {
+        return pixelDao.updateMark(id, isMark)
+    }
+
     override suspend fun updateFollow(id: Long, isFollow: Boolean) {
         return pixelDao.updateFollow(id, isFollow)
     }

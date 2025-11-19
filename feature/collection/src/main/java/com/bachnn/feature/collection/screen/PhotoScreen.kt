@@ -63,6 +63,7 @@ import com.bachnn.data.model.PhotoSrc
 import com.bachnn.data.model.PixelsPhoto
 import com.bachnn.feature.collection.R
 import com.bachnn.feature.collection.ShowImage
+import com.bachnn.feature.collection.shareLink
 import com.bachnn.feature.collection.view.CircleNetworkImage
 import com.bachnn.feature.collection.viewmodel.PhotoViewModel
 import com.bachnn.feature.collection.viewmodel.PixelUiState
@@ -333,12 +334,3 @@ fun ItemPhoto(
     }
 }
 
-
-fun shareLink(context: Context, url: String) {
-    val sendIntent = Intent(Intent.ACTION_SEND).apply {
-        type = "text/plain"
-        putExtra(Intent.EXTRA_TEXT, url)
-    }
-    val shareIntent = Intent.createChooser(sendIntent, "Share link via")
-    context.startActivity(shareIntent)
-}

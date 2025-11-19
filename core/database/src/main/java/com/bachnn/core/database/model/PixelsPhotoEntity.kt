@@ -19,7 +19,8 @@ data class PixelsPhotoEntity(
     val timestamps: Long,
     @Embedded val src: PhotoSrcEntity,  // nhúng PhotoSrc
     var isFavorite: Boolean,
-    var isFollow: Boolean
+    var isFollow: Boolean,
+    var isMark: Boolean = false
 )
 
 //fun PixelsPhotoEntity.asExternalModel(): PixelsPhoto {

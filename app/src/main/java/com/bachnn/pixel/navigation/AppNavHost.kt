@@ -149,7 +149,7 @@ fun NavAppHost(navHostController: NavHostController) {
 
         }
 
-        buildPhotoDetail()
+        buildPhotoDetail(navHostController)
 
         buildPhotographer()
 

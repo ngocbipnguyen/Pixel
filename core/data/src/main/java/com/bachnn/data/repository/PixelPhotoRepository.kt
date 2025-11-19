@@ -13,6 +13,8 @@ interface PixelPhotoRepository {
 
     suspend fun updateFavorite(id: Long, isFavorite: Boolean)
 
+    suspend fun updateMark(id: Long, isMark: Boolean)
+
     suspend fun updateFollow(id: Long, isFavorite: Boolean)
 
 }

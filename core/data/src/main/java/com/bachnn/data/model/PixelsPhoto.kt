@@ -20,7 +20,8 @@ data class PixelsPhoto(
     val src: PhotoSrc,
     val timestamps: Long,
     var isFavorite: Boolean,
-    var isFollow: Boolean
+    var isFollow: Boolean,
+    var isMark: Boolean
 )
 
 fun PixelsPhoto.asExternalNetworkToEntityModel() = PixelsPhotoEntity(
@@ -54,7 +55,8 @@ fun PixelsPhotoEntity.asExternalNetworkToDataModel() = com.bachnn.data.model.Pix
     src = src.asExternalNetworkToDataModel(),
     timestamps = timestamps,
     isFavorite = isFavorite,
-    isFollow = isFollow
+    isFollow = isFollow,
+    isMark = isMark
 )
 
 fun PixelsPhoto.asExternalNetworkToDataModel() = com.bachnn.data.model.PixelsPhoto(
@@ -71,5 +73,6 @@ fun PixelsPhoto.asExternalNetworkToDataModel() = com.bachnn.data.model.PixelsPho
     src = src.asExternalNetworkToDataModel(),
     timestamps = timestamps,
     isFollow = false,
-    isFavorite = false
+    isFavorite = false,
+    isMark = false,
 )
