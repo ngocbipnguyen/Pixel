@@ -30,7 +30,7 @@ fun NavController.navigateToPhotographer(
 }
 
 
-fun NavGraphBuilder.buildPhotographer() {
+fun NavGraphBuilder.buildPhotographer(navController: NavController) {
     composable<PhotographerRoute> { backStackEntry ->
         val photographer: String = backStackEntry.toRoute<PhotographerRoute>().photographerSrc
         val viewModel: PhotographerViewModel =
@@ -40,6 +40,6 @@ fun NavGraphBuilder.buildPhotographer() {
                 factory.create(photographer)
 
             }
-        PhotographerScreen(photographer, viewModel = viewModel)
+        PhotographerScreen(photographer, viewModel = viewModel, navigateHome = { action, data -> }, onBackPress = {navController.popBackStack()})
     }
 }

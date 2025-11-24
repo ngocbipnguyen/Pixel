@@ -25,4 +25,7 @@
     <string name="content_checkbox">Yes, I confirm that will only upload content that I own the rights to.</string>
     <string name="upload_btn">UPLOAD MEDIA</string>
     <string name="download">Download</string>
+    <string name="follow">Follow</string>
+    <string name="all_time">All-time rank</string>
+    <string name="month_rank">30-day rank</string>
 </resources>

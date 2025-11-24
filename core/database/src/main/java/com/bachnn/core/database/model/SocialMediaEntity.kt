@@ -10,7 +10,8 @@ data class SocialMediaEntity(
     @PrimaryKey
     val id: String,
     val name: String,
-    val icon: Long,
+    val icon: Int,
     val link: String,
-    var enable: Boolean
+    var enable: Boolean,
+    val photographerId: Long
 )

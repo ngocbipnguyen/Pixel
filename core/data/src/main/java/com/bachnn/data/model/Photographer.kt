@@ -19,7 +19,7 @@ data class Photographer(
     val monthRank: Long,
     var follow: Boolean,
     val albums: List<Album>,
-    val social: List<SocialMediaEntity>,
+    val social: List<SocialMedia>,
     val photos: List<PhotoSrc>
 )
 
@@ -38,7 +38,7 @@ fun PhotographerNetwork.asExternalNetworkToDataModel(): Photographer {
         monthRank = monthRank,
         follow = follow,
         albums = albums.map { it -> it.asExternalNetworkToModel() },
-        social = ArrayList<SocialMediaEntity>(),
+        social = ArrayList<SocialMedia>(),
         photos = photos.map { it -> it.asExternalNetworkToDataModel() }
     )
 }
@@ -80,7 +80,7 @@ fun PhotographerEntity.asExternalEntityToDataModel(): Photographer {
         monthRank = monthRank,
         follow = follow,
         albums = albums.map { it -> it.asExternalEntityToDataModel() },
-        social = social,
+        social = social.map { it -> it.asExternalEntityToDataModel() },
         photos = photos.map { it -> it.asExternalNetworkToDataModel() }
     )
 }
