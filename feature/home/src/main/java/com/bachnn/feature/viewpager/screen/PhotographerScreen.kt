@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.pager.HorizontalPager
@@ -56,6 +57,7 @@ import com.bachnn.feature.collection.screen.PagerError
 import com.bachnn.feature.collection.screen.PagerLoading
 import com.bachnn.feature.collection.view.CircleNetworkImage
 import com.bachnn.feature.viewpager.R
+import com.bachnn.feature.viewpager.viewmodel.ContentViewModel
 import com.bachnn.feature.viewpager.viewmodel.PhotographerUiState
 import com.bachnn.feature.viewpager.viewmodel.PhotographerViewModel
 import kotlinx.coroutines.launch
@@ -66,58 +68,14 @@ fun PhotographerScreen(
     photographerId: String,
     viewModel: PhotographerViewModel = hiltViewModel(),
     navigateHome: (Int, Any) -> Unit,
-    onBackPress:() -> Unit
+    onBackPress: () -> Unit
 ) {
 
     val scaffoldState = rememberBottomSheetScaffoldState()
 
     BottomSheetScaffold(
-        topBar = {
-            TopAppBar(
-                title = { }, actions = {
-
-                    Box(
-                        modifier = Modifier
-                            .clip(shape = MaterialTheme.shapes.small).background(color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.1f))
-                    ) {
-                        IconButton(onClick = {
-
-                        }) {
-                            IconButton(onClick = {}, shape = MaterialTheme.shapes.small) {
-                                Icon(Icons.Default.MoreHoriz, contentDescription = "more")
-                            }
-                        }
-
-                    }
-
-                    Spacer(Modifier.width(8.dp))
-
-                    Button(
-                        onClick = {},
-                        shape = MaterialTheme.shapes.small,
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.1f),
-                            contentColor = MaterialTheme.colorScheme.onBackground
-                        )
-                    ) {
-                        Text(
-                            stringResource(R.string.follow),
-                            style = MaterialTheme.typography.titleLarge
-                        )
-                    }
-                },
-                navigationIcon = {
-                    IconButton(onClick = {
-                        onBackPress()
-                    }) {
-                        Icon(Icons.Default.ArrowBackIosNew, contentDescription = "back")
-                    }
-
-                }
-            )
-        },
         scaffoldState = scaffoldState,
-        sheetPeekHeight = 400.dp,
+        sheetPeekHeight = 450.dp,
         sheetContent = {
             val pages = SettingsPage.entries.toTypedArray()
             val pagerState = rememberPagerState(pageCount = {
@@ -128,7 +86,7 @@ fun PhotographerScreen(
             Column(
                 Modifier
                     .fillMaxWidth()
-                    .height(450.dp)
+                    .height(750.dp)
                     .padding(16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
@@ -159,26 +117,51 @@ fun PhotographerScreen(
                     }
 
                 }
+                when (viewModel.photographerUiState) {
+                    is PhotographerUiState.Success -> {
+                        val photographer =
+                            (viewModel.photographerUiState as PhotographerUiState.Success).photographer
 
-                HorizontalPager(
-                    state = pagerState,
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .weight(1f),
-                    userScrollEnabled = false
-                ) { page ->
-                    when (pages[page]) {
-                        SettingsPage.PHOTO -> {
-                            ContentScreen(navigateHome = navigateHome)
-                        }
+                        HorizontalPager(
+                            state = pagerState,
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .weight(1f),
+                            userScrollEnabled = false
+                        ) { page ->
+                            when (pages[page]) {
+                                SettingsPage.PHOTO -> {
+                                    val viewModel: ContentViewModel =
+                                        hiltViewModel<ContentViewModel, ContentViewModel.Factory>(
+                                            key = photographer.id
+                                        ) { factory ->
+                                            factory.create(photographer)
+                                        }
+                                    ContentScreen(
+                                        photographer = photographer,
+                                        viewModel = viewModel,
+                                        navigateHome = navigateHome
+                                    )
+                                }
 
-                        SettingsPage.MARK -> {
-                            MarkScreen(navigateHome = navigateHome)
-                        }
+                                SettingsPage.MARK -> {
+                                    MarkScreen(navigateHome = navigateHome)
+                                }
 
-                        SettingsPage.INFO -> {
-                            InfoScreen(navigateHome = navigateHome)
+                                SettingsPage.INFO -> {
+                                    InfoScreen(navigateHome = navigateHome)
+                                }
+                            }
+
                         }
+                    }
+
+                    is PhotographerUiState.Loading -> {
+
+                    }
+
+                    is PhotographerUiState.Error -> {
+
                     }
 
                 }
@@ -192,10 +175,93 @@ fun PhotographerScreen(
             is PhotographerUiState.Success -> {
                 val photographer =
                     (viewModel.photographerUiState as PhotographerUiState.Success).photographer
-                PhotographerPage(
+                Scaffold(
                     modifier = Modifier.padding(top = contentPadding.calculateTopPadding()),
-                    photographer
-                )
+                    topBar = {
+                        TopAppBar(
+                            title = { }, actions = {
+
+                                Row(
+                                    modifier = Modifier.padding(start = 56.dp, end = 8.dp),
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+
+                                    CircleNetworkImage(
+                                        modifier = Modifier.size(36.dp),
+                                        url = photographer.url
+                                    )
+                                    Spacer(Modifier.width(8.dp))
+                                    Text(
+                                        photographer.name,
+                                        style = MaterialTheme.typography.titleMedium,
+                                        fontWeight = FontWeight.Bold
+                                    )
+                                }
+
+                                Spacer(Modifier.fillMaxWidth().weight(1f))
+
+                                Box(
+                                    modifier = Modifier
+                                        .size(42.dp)
+                                        .clip(shape = MaterialTheme.shapes.small)
+                                        .background(
+                                            color = MaterialTheme.colorScheme.onBackground.copy(
+                                                alpha = 0.1f
+                                            )
+                                        )
+                                ) {
+                                    IconButton(onClick = {
+
+                                    }) {
+                                        IconButton(
+                                            onClick = {},
+                                            shape = MaterialTheme.shapes.small
+                                        ) {
+                                            Icon(
+                                                Icons.Default.MoreHoriz,
+                                                contentDescription = "more"
+                                            )
+                                        }
+                                    }
+
+                                }
+
+                                Spacer(Modifier.width(8.dp))
+
+                                Button(
+                                    onClick = {},
+                                    shape = MaterialTheme.shapes.small,
+                                    colors = ButtonDefaults.buttonColors(
+                                        containerColor = MaterialTheme.colorScheme.onBackground.copy(
+                                            alpha = 0.1f
+                                        ),
+                                        contentColor = MaterialTheme.colorScheme.onBackground
+                                    )
+                                ) {
+                                    Text(
+                                        stringResource(R.string.follow),
+                                        style = MaterialTheme.typography.titleSmall,
+                                        fontWeight = FontWeight.Bold
+                                    )
+                                }
+                            },
+                            navigationIcon = {
+                                IconButton(onClick = {
+                                    onBackPress()
+                                }) {
+                                    Icon(Icons.Default.ArrowBackIosNew, contentDescription = "back")
+                                }
+
+                            }
+                        )
+                    }
+                ) { contentPadding ->
+                    PhotographerPage(
+                        modifier = Modifier.padding(top = contentPadding.calculateTopPadding()),
+                        photographer
+                    )
+                }
+
             }
 
             is PhotographerUiState.Loading -> {

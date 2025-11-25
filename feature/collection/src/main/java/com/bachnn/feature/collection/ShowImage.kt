@@ -11,9 +11,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
@@ -126,6 +128,59 @@ fun ShowPhotoCollection(photos: List<PhotoSrc>) {
                 contentDescription = "",
                 contentScale = ContentScale.Crop,
             )
+        }
+    }
+}
+
+@OptIn(ExperimentalGlideComposeApi::class)
+@Composable
+fun ShowImageThumbnail(
+    photo: PixelsPhoto,
+    onClickPhoto: (PixelsPhoto) -> Unit
+) {
+    val signature = ObjectKey(photo.src.original)
+    val context = LocalContext.current
+
+    val requestManager = remember { Glide.with(context) }
+
+    val configuration = LocalConfiguration.current
+    val screenWidthDp = configuration.screenWidthDp.dp / 2
+    val widthRateDp: Float =
+        pxToDp(photo.width).toFloat() / (configuration.screenWidthDp.toFloat() / 2)
+    val height = photo.height / widthRateDp - 24
+
+    val colorCode = Color(android.graphics.Color.parseColor(photo.avgColor))
+
+    Box(
+        modifier = Modifier
+            .background(colorCode)
+    ) {
+        GlideImage(
+            model = photo.src.original,
+            contentDescription = "",
+            Modifier
+                .size(screenWidthDp, pxToDp(height.toInt()).dp)
+                .fillMaxWidth()
+                .clickable {
+                    // todo
+                    onClickPhoto(photo)
+                },
+            contentScale = ContentScale.FillHeight
+        ) {
+            it.thumbnail(
+                requestManager
+                    .asDrawable()
+                    .load(photo.src.small)
+                    .signature(signature)
+                    .dontAnimate()
+                    .skipMemoryCache(false)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+            )
+                .signature(signature)
+                .dontAnimate()
+                .skipMemoryCache(false)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .onlyRetrieveFromCache(false)
         }
     }
 }

@@ -41,4 +41,8 @@ interface PhotoDao {
     @Query("UPDATE pixels_photos SET isFollow = :isFollow WHERE id = :id")
     suspend fun updateFollow(id: Long, isFollow: Boolean)
 
+
+    @Query("SELECT * FROM pixels_photos WHERE idCollection= :collectionId")
+    suspend fun getPhotosByCollectionId(collectionId: String): List<PixelsPhotoEntity>
+
 }

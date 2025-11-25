@@ -3,8 +3,10 @@ package com.bachnn.data.model
 import com.bachnn.core.database.model.PhotographerEntity
 import com.bachnn.core.database.model.SocialMediaEntity
 import com.bachnn.core.network.model.PhotographerNetwork
+import kotlinx.serialization.Serializable
 import java.util.ArrayList
 
+@Serializable
 data class Photographer(
     val id: String,
     val name: String,
