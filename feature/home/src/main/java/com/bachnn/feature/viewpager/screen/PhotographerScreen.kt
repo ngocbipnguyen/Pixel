@@ -61,6 +61,7 @@ import com.bachnn.feature.collection.screen.PagerLoading
 import com.bachnn.feature.collection.view.CircleNetworkImage
 import com.bachnn.feature.viewpager.R
 import com.bachnn.feature.viewpager.viewmodel.ContentViewModel
+import com.bachnn.feature.viewpager.viewmodel.MarkViewModel
 import com.bachnn.feature.viewpager.viewmodel.PhotographerUiState
 import com.bachnn.feature.viewpager.viewmodel.PhotographerViewModel
 import kotlinx.coroutines.launch
@@ -148,7 +149,12 @@ fun PhotographerScreen(
                                 }
 
                                 SettingsPage.MARK -> {
-                                    MarkScreen(navigateHome = navigateHome)
+                                    val viewModel: MarkViewModel = hiltViewModel<MarkViewModel, MarkViewModel.Factory>(
+                                        key = photographer.id
+                                    ) { factory ->
+                                        factory.create(photographer)
+                                    }
+                                    MarkScreen(navigateHome = navigateHome, viewModel = viewModel)
                                 }
 
                                 SettingsPage.INFO -> {

@@ -20,4 +20,10 @@ interface PixelPhotoRepository {
 
     suspend fun getPhotosByCollectionId(collectionId: String): List<PixelsPhoto>
 
+    suspend fun getPhotosByFavorite(): List<PixelsPhoto>
+
+    suspend fun getPhotosByMark(): List<PixelsPhoto>
+
+    suspend fun getPhotosByFollow(): List<PixelsPhoto>
+
 }

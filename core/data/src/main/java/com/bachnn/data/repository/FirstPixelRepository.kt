@@ -57,4 +57,16 @@ class FirstPixelRepository @Inject constructor(
         return pixelDao.getPhotosByCollectionId(collectionId = collectionId).map { it -> it.asExternalNetworkToDataModel() }
     }
 
+    override suspend fun getPhotosByFavorite(): List<PixelsPhoto> {
+        return pixelDao.getPhotosByFavorite().map { it -> it.asExternalNetworkToDataModel() }
+    }
+
+    override suspend fun getPhotosByMark(): List<PixelsPhoto> {
+        return pixelDao.getPhotosByMark().map { it -> it.asExternalNetworkToDataModel() }
+    }
+
+    override suspend fun getPhotosByFollow(): List<PixelsPhoto> {
+        return pixelDao.getPhotosByFollow().map { it -> it.asExternalNetworkToDataModel() }
+    }
+
 }

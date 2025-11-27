@@ -45,4 +45,13 @@ interface PhotoDao {
     @Query("SELECT * FROM pixels_photos WHERE idCollection= :collectionId")
     suspend fun getPhotosByCollectionId(collectionId: String): List<PixelsPhotoEntity>
 
+    @Query("SELECT * FROM pixels_photos WHERE isFavorite=1")
+    suspend fun getPhotosByFavorite(): List<PixelsPhotoEntity>
+
+    @Query("SELECT * FROM pixels_photos WHERE isMark=1")
+    suspend fun getPhotosByMark(): List<PixelsPhotoEntity>
+
+    @Query("SELECT * FROM pixels_photos WHERE isFollow= 1")
+    suspend fun getPhotosByFollow(): List<PixelsPhotoEntity>
+
 }
