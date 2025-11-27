@@ -1,5 +1,6 @@
 package com.bachnn.feature.viewpager.screen
 
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -37,11 +38,13 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -181,8 +184,19 @@ fun PhotographerScreen(
                         TopAppBar(
                             title = { }, actions = {
 
+                                val sheetOffset = scaffoldState.bottomSheetState.requireOffset()
+
+                                val alpha by animateFloatAsState(
+                                    targetValue = when {
+                                        sheetOffset < 100f -> 1f        // sheet gần đỉnh → hiện rõ
+                                        sheetOffset > 600f -> 0f        // sheet xuống sâu → mờ
+                                        else -> (600f - sheetOffset) / 500f
+                                    },
+                                    label = ""
+                                )
+
                                 Row(
-                                    modifier = Modifier.padding(start = 56.dp, end = 8.dp),
+                                    modifier = Modifier.padding(start = 56.dp, end = 8.dp).graphicsLayer(alpha = alpha),
                                     verticalAlignment = Alignment.CenterVertically
                                 ) {
 
