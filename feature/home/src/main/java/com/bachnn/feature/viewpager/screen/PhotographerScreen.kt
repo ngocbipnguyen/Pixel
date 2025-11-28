@@ -139,7 +139,7 @@ fun PhotographerScreen(
                                         hiltViewModel<ContentViewModel, ContentViewModel.Factory>(
                                             key = photographer.id
                                         ) { factory ->
-                                            factory.create(photographer)
+                                            factory.create(photographer = photographer, user = null)
                                         }
                                     ContentScreen(
                                         photographer = photographer,
@@ -152,7 +152,7 @@ fun PhotographerScreen(
                                     val viewModel: MarkViewModel = hiltViewModel<MarkViewModel, MarkViewModel.Factory>(
                                         key = photographer.id
                                     ) { factory ->
-                                        factory.create(photographer)
+                                        factory.create(photographer = photographer, user = null)
                                     }
                                     MarkScreen(navigateHome = navigateHome, viewModel = viewModel)
                                 }

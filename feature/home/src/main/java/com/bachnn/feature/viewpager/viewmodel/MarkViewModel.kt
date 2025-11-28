@@ -5,20 +5,24 @@ import android.content.ContentUris
 import android.content.Context
 import android.net.Uri
 import android.provider.MediaStore
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.bachnn.data.model.PhotoSrc
 import com.bachnn.data.model.Photographer
 import com.bachnn.data.model.PixelsPhoto
-import com.bachnn.data.repository.FirstCollectionRepository
+import com.bachnn.data.model.User
 import com.bachnn.data.repository.FirstPixelRepository
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
+import kotlin.Long
 
 sealed interface MarkUiState {
     data class Success(
@@ -32,28 +36,44 @@ sealed interface MarkUiState {
 @HiltViewModel(assistedFactory = MarkViewModel.Factory::class)
 class MarkViewModel @AssistedInject constructor(
     val pixelRepository: FirstPixelRepository,
-    val collectionRepository: FirstCollectionRepository,
-    @Assisted val photographer: Photographer
+    @ApplicationContext private val context: Context,
+    @Assisted val photographer: Photographer?,
+    @Assisted val user: User?
 ) : ViewModel() {
     @AssistedFactory
     interface Factory {
-        fun create(photographer: Photographer): MarkViewModel
+        fun create(photographer: Photographer?, user: User?): MarkViewModel
     }
 
     var markUiState: MarkUiState by mutableStateOf(MarkUiState.Loading)
 
     init {
-        // todo: add collection favorite, mark, download, and album in photographer.
         viewModelScope.launch {
-//            val pixelFavorite = pixelRepository.getPhotosByFavorite()
-//            val pixelMark = pixelRepository.getPhotosByMark()
-//            val pixelFollow = pixelRepository.getPhotosByFollow()
-//            val uriDownload =  loadImagesFromMediaStore()
 
             markUiState = MarkUiState.Loading
             try {
                 val pixels = ArrayList<PixelsPhoto>()
-                photographer.albums.forEach { it ->
+
+                if (user != null) {
+                    val pixelFavorite = pixelRepository.getPhotosByFavorite()
+                    val pixelMark = pixelRepository.getPhotosByMark()
+                    val pixelFollow = pixelRepository.getPhotosByFollow()
+                    Log.e("MarkViewModel", "pixelFollow size: ${pixelFollow.size}")
+                    if (pixelFavorite.isNotEmpty()) {
+                        pixels.add(pixelFavorite[0])
+                    }
+                    if (pixelMark.isNotEmpty()) {
+                        pixels.add(pixelMark[0])
+                    }
+                    if (pixelMark.isNotEmpty()) {
+                        pixels.add(pixelFollow[0])
+                    }
+                    val uriDownload = loadImagesFromMediaStore()
+                    if (uriDownload.isNotEmpty()) {
+                        pixels.add(uriDownload[0])
+                    }
+                }
+                photographer?.albums?.forEach { it ->
                     val collection = pixelRepository.getPhotosByCollectionId(it.id)
                     pixels.add(collection[0])
                 }
@@ -67,15 +87,19 @@ class MarkViewModel @AssistedInject constructor(
 
 
     @SuppressLint("Range")
-    fun loadImagesFromMediaStore(context: Context): List<Uri> {
-        val images = mutableListOf<Uri>()
+    fun loadImagesFromMediaStore(): List<PixelsPhoto> {
+        val photos = mutableListOf<PixelsPhoto>()
 
         val collection = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
 
         val projection = arrayOf(
             MediaStore.Images.Media._ID,
             MediaStore.Images.Media.DISPLAY_NAME,
-            MediaStore.Images.Media.RELATIVE_PATH
+            MediaStore.Images.Media.RELATIVE_PATH,
+            MediaStore.Images.Media.WIDTH,
+            MediaStore.Images.Media.HEIGHT,
+            MediaStore.Images.Media.DATE_ADDED,
+            MediaStore.Images.Media.DATE_TAKEN
         )
 
         val selection = "${MediaStore.Images.Media.RELATIVE_PATH} LIKE ?"
@@ -91,17 +115,87 @@ class MarkViewModel @AssistedInject constructor(
 
         cursor?.use {
             val idColumn = it.getColumnIndex(MediaStore.Images.Media._ID)
+            val widthColumn = it.getColumnIndex(MediaStore.Images.Media.WIDTH)
+            val heightColumn = it.getColumnIndex(MediaStore.Images.Media.HEIGHT)
+            val dateAddedColumn = it.getColumnIndex(MediaStore.Images.Media.DATE_ADDED)
+            val dateTakenColumn = it.getColumnIndex(MediaStore.Images.Media.DATE_TAKEN)
+            val displayNameColumn = it.getColumnIndex(MediaStore.Images.Media.DISPLAY_NAME)
 
             while (it.moveToNext()) {
                 val id = it.getLong(idColumn)
+                val width = it.getInt(widthColumn)
+                val height = it.getInt(heightColumn)
+                val dateAdded =
+                    it.getLong(dateAddedColumn) * 1000
+                val dateTaken = if (dateTakenColumn >= 0) {
+                    it.getLong(dateTakenColumn)
+                } else {
+                    dateAdded // Fallback to dateAdded
+                }
+                val displayName = it.getString(displayNameColumn) ?: "image_$id"
+
                 val uri = ContentUris.withAppendedId(
                     MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id
                 )
-                images.add(uri)
+
+                val pixelPhoto = createPixelsPhotoFromUri(
+                    uri = uri,
+                    id = id,
+                    width = width,
+                    height = height,
+                    timestamp = dateTaken,
+                    displayName = displayName
+                )
+
+                photos.add(pixelPhoto)
             }
         }
 
-        return images
+        Log.e("MarkViewModel","download size: ${photos.size}")
+        return photos
+    }
+
+
+    private fun createPixelsPhotoFromUri(
+        uri: Uri,
+        id: Long,
+        width: Int,
+        height: Int,
+        timestamp: Long,
+        displayName: String
+    ): PixelsPhoto {
+        val uriString = uri.toString()
+
+        val photoSrc = PhotoSrc(
+            original = uriString,
+            large2x = uriString,
+            large = uriString,
+            medium = uriString,
+            small = uriString,
+            portrait = uriString,
+            landscape = uriString,
+            tiny = uriString
+        )
+
+        val avgColor = "#000000"
+
+        return PixelsPhoto(
+            id = id,
+            idCollection = "local_downloads",
+            type = "photo",
+            photographerId = 0L,
+            photographer = "Local",
+            photographerUrl = "",
+            url = uriString,
+            width = if (width > 0) width else 1920,
+            height = if (height > 0) height else 1080,
+            avgColor = avgColor,
+            src = photoSrc,
+            timestamps = timestamp,
+            isFavorite = false,
+            isFollow = false,
+            isMark = true
+        )
     }
 
 

@@ -53,7 +53,9 @@ import com.bachnn.feature.collection.screen.PagerError
 import com.bachnn.feature.collection.screen.PagerLoading
 import com.bachnn.feature.collection.view.CircleNetworkImage
 import com.bachnn.feature.viewpager.R
+import com.bachnn.feature.viewpager.viewmodel.ContentViewModel
 import com.bachnn.feature.viewpager.viewmodel.FollowUiState
+import com.bachnn.feature.viewpager.viewmodel.MarkViewModel
 import com.bachnn.feature.viewpager.viewmodel.SettingsUiState
 import com.bachnn.feature.viewpager.viewmodel.SettingsViewModel
 import kotlinx.coroutines.launch
@@ -139,27 +141,45 @@ fun SettingsScreen(
 
                 }
 
-                HorizontalPager(
-                    state = pagerState,
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .weight(1f),
-                    userScrollEnabled = false
-                ) { page ->
-                    when (pages[page]) {
-                        SettingsPage.PHOTO -> {
-                            ContentScreen(navigateHome = navigateHome)
-                        }
+                when (viewModel.settingsUiState) {
+                    is SettingsUiState.Success -> {
+                        user = (viewModel.settingsUiState as SettingsUiState.Success).user
 
-                        SettingsPage.MARK -> {
-                            MarkScreen(navigateHome = navigateHome)
-                        }
+                        HorizontalPager(
+                            state = pagerState,
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .weight(1f),
+                            userScrollEnabled = false
+                        ) { page ->
+                            when (pages[page]) {
+                                SettingsPage.PHOTO -> {
+                                    val viewModel: ContentViewModel = hiltViewModel<ContentViewModel, ContentViewModel.Factory>(key = user?.uid) {
+                                            factory -> factory.create(user=user!!, photographer = null)
+                                    }
+                                    ContentScreen(navigateHome = navigateHome, viewModel = viewModel)
+                                }
 
-                        SettingsPage.INFO -> {
-                            InfoScreen(navigateHome = navigateHome)
+                                SettingsPage.MARK -> {
+                                    val viewModel: MarkViewModel = hiltViewModel<MarkViewModel, MarkViewModel.Factory>(
+                                        key = user?.uid
+                                    ) { factory ->
+                                        factory.create(photographer = null, user = user)
+                                    }
+                                    MarkScreen(navigateHome = navigateHome, viewModel = viewModel)
+                                }
+
+                                SettingsPage.INFO -> {
+                                    InfoScreen(navigateHome = navigateHome)
+                                }
+                            }
+
                         }
                     }
+                    is SettingsUiState.Error -> {}
+                    is SettingsUiState.Loading -> {
 
+                    }
                 }
 
             }

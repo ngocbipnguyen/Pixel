@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bachnn.data.model.Photographer
 import com.bachnn.data.model.PixelsPhoto
+import com.bachnn.data.model.User
 import com.bachnn.data.repository.FirstCollectionRepository
 import com.bachnn.data.repository.FirstPhotographerRepository
 import com.bachnn.data.repository.FirstPixelRepository
@@ -31,7 +32,8 @@ sealed interface ContentUiState {
 @HiltViewModel(assistedFactory = ContentViewModel.Factory::class)
 class ContentViewModel @AssistedInject constructor(
     val pixelPhotoRepository: FirstPixelRepository,
-    @Assisted val photographer: Photographer
+    @Assisted val photographer: Photographer? = null,
+    @Assisted val user: User? = null,
 ) : ViewModel() {
 
     var contentUiState: ContentUiState by mutableStateOf(ContentUiState.Loading)
@@ -39,13 +41,13 @@ class ContentViewModel @AssistedInject constructor(
 
     init {
 
-        Log.e("ContentViewModel", photographer.id.toString())
+        Log.e("ContentViewModel", photographer?.id.toString())
 
         try {
             contentUiState = ContentUiState.Loading
             viewModelScope.launch {
                 var allPhotos = ArrayList<PixelsPhoto>()
-                photographer.albums.forEach { it ->
+                photographer?.albums?.forEach { it ->
                     val photos = pixelPhotoRepository.getPhotosByCollectionId(it.id)
                     photos.let { c -> allPhotos.addAll(c) }
                     Log.e("ContentViewModel", "Photos size ${photos.size}")
@@ -60,7 +62,7 @@ class ContentViewModel @AssistedInject constructor(
 
     @AssistedFactory
     interface Factory {
-        fun create(photographer: Photographer): ContentViewModel
+        fun create(photographer: Photographer?, user: User?): ContentViewModel
     }
 
 }
