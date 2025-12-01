@@ -11,7 +11,7 @@ data class PixelsPhoto(
     val idCollection: String,
     val type: String,
     val photographerId: Long,
-    val photographer: String,
+    var photographer: String,
     val photographerUrl: String,
     val url: String,
     val width: Int,

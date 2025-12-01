@@ -1,5 +1,6 @@
 package com.bachnn.feature.viewpager.screen
 
+import android.widget.Toast
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -39,18 +40,24 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.bachnn.data.model.Photographer
 import com.bachnn.data.model.PixelsPhoto
@@ -137,7 +144,7 @@ fun PhotographerScreen(
                                 SettingsPage.PHOTO -> {
                                     val viewModel: ContentViewModel =
                                         hiltViewModel<ContentViewModel, ContentViewModel.Factory>(
-                                            key = photographer.id
+                                            key = "${photographer.id}_photo"
                                         ) { factory ->
                                             factory.create(photographer = photographer, user = null)
                                         }
@@ -149,11 +156,12 @@ fun PhotographerScreen(
                                 }
 
                                 SettingsPage.MARK -> {
-                                    val viewModel: MarkViewModel = hiltViewModel<MarkViewModel, MarkViewModel.Factory>(
-                                        key = photographer.id
-                                    ) { factory ->
-                                        factory.create(photographer = photographer, user = null)
-                                    }
+                                    val viewModel: MarkViewModel =
+                                        hiltViewModel<MarkViewModel, MarkViewModel.Factory>(
+                                            key = "${photographer.id}_mark"
+                                        ) { factory ->
+                                            factory.create(photographer = photographer, user = null)
+                                        }
                                     MarkScreen(navigateHome = navigateHome, viewModel = viewModel)
                                 }
 
@@ -182,6 +190,11 @@ fun PhotographerScreen(
     ) { contentPadding ->
         when (viewModel.photographerUiState) {
             is PhotographerUiState.Success -> {
+
+                val connext = LocalContext.current
+                var followState by remember { mutableStateOf(false) }
+                var showDialog by remember { mutableStateOf(false) }
+
                 val photographer =
                     (viewModel.photographerUiState as PhotographerUiState.Success).photographer
                 Scaffold(
@@ -202,7 +215,9 @@ fun PhotographerScreen(
                                 )
 
                                 Row(
-                                    modifier = Modifier.padding(start = 56.dp, end = 8.dp).graphicsLayer(alpha = alpha),
+                                    modifier = Modifier
+                                        .padding(start = 56.dp, end = 8.dp)
+                                        .graphicsLayer(alpha = alpha),
                                     verticalAlignment = Alignment.CenterVertically
                                 ) {
 
@@ -218,7 +233,11 @@ fun PhotographerScreen(
                                     )
                                 }
 
-                                Spacer(Modifier.fillMaxWidth().weight(1f))
+                                Spacer(
+                                    Modifier
+                                        .fillMaxWidth()
+                                        .weight(1f)
+                                )
 
                                 Box(
                                     modifier = Modifier
@@ -230,18 +249,18 @@ fun PhotographerScreen(
                                             )
                                         )
                                 ) {
-                                    IconButton(onClick = {
 
-                                    }) {
-                                        IconButton(
-                                            onClick = {},
-                                            shape = MaterialTheme.shapes.small
-                                        ) {
-                                            Icon(
-                                                Icons.Default.MoreHoriz,
-                                                contentDescription = "more"
-                                            )
-                                        }
+                                    IconButton(
+                                        onClick = {
+                                            //todo: show dialog.
+                                            showDialog = true
+                                        },
+                                        shape = MaterialTheme.shapes.small
+                                    ) {
+                                        Icon(
+                                            Icons.Default.MoreHoriz,
+                                            contentDescription = "more"
+                                        )
                                     }
 
                                 }
@@ -249,7 +268,10 @@ fun PhotographerScreen(
                                 Spacer(Modifier.width(8.dp))
 
                                 Button(
-                                    onClick = {},
+                                    onClick = {
+                                        // todo update follow.
+                                        followState = !followState
+                                    },
                                     shape = MaterialTheme.shapes.small,
                                     colors = ButtonDefaults.buttonColors(
                                         containerColor = MaterialTheme.colorScheme.onBackground.copy(
@@ -258,11 +280,20 @@ fun PhotographerScreen(
                                         contentColor = MaterialTheme.colorScheme.onBackground
                                     )
                                 ) {
-                                    Text(
-                                        stringResource(R.string.follow),
-                                        style = MaterialTheme.typography.titleSmall,
-                                        fontWeight = FontWeight.Bold
-                                    )
+                                    if (followState) {
+                                        Text(
+                                            stringResource(R.string.unfollow),
+                                            style = MaterialTheme.typography.titleSmall,
+                                            fontWeight = FontWeight.Bold
+                                        )
+                                    } else {
+                                        Text(
+                                            stringResource(R.string.follow),
+                                            style = MaterialTheme.typography.titleSmall,
+                                            fontWeight = FontWeight.Bold
+                                        )
+                                    }
+
                                 }
                             },
                             navigationIcon = {
@@ -280,6 +311,93 @@ fun PhotographerScreen(
                         modifier = Modifier.padding(top = contentPadding.calculateTopPadding()),
                         photographer
                     )
+
+                    if (showDialog) {
+                        Dialog(onDismissRequest = { showDialog = false }) {
+                            Box(
+                                modifier = Modifier
+                                    .clip(MaterialTheme.shapes.medium)
+                                    .background(MaterialTheme.colorScheme.background),
+                            ) {
+                                Column(
+                                    modifier = Modifier
+                                        .padding(24.dp)
+                                        .width(400.dp)
+                                        .fillMaxWidth()
+                                ) {
+                                    Text(
+                                        stringResource(R.string.user_action),
+                                        style = MaterialTheme.typography.headlineSmall,
+                                        fontWeight = FontWeight.Bold
+                                    )
+
+                                    Spacer(Modifier.height(8.dp))
+
+                                    OutlinedButton(
+                                        onClick = {
+                                            Toast.makeText(
+                                                connext,
+                                                "Block ${photographer.name}",
+                                                Toast.LENGTH_SHORT
+                                            ).show()
+                                        },
+                                        shape = MaterialTheme.shapes.medium,
+                                        colors = ButtonDefaults.outlinedButtonColors(
+                                            contentColor = MaterialTheme.colorScheme.error
+                                        )
+                                    ) {
+                                        Text(
+                                            "Block ${photographer.name}",
+                                            style = MaterialTheme.typography.headlineSmall,
+                                            textAlign = TextAlign.Center,
+                                            modifier = Modifier.padding(start = 4.dp, end = 4.dp).weight(1f),
+                                        )
+                                    }
+
+                                    Spacer(Modifier.height(8.dp))
+                                    OutlinedButton(
+                                        onClick = {
+                                            Toast.makeText(
+                                                connext,
+                                                "Report ${photographer.name}",
+                                                Toast.LENGTH_SHORT
+                                            ).show()
+                                        },
+                                        shape = MaterialTheme.shapes.medium,
+                                        colors = ButtonDefaults.outlinedButtonColors(
+                                            contentColor = MaterialTheme.colorScheme.error
+                                        )
+                                    ) {
+                                        Text(
+                                            "Report ${photographer.name}",
+                                            style = MaterialTheme.typography.headlineSmall,
+                                            textAlign = TextAlign.Center,
+                                            modifier = Modifier.padding(start = 4.dp, end = 4.dp).weight(1f),
+                                        )
+                                    }
+
+                                    Spacer(Modifier.height(8.dp))
+                                    Button(
+                                        onClick = {
+                                            showDialog = false
+                                        }, shape = MaterialTheme.shapes.medium,
+                                        colors = ButtonDefaults.buttonColors(
+                                            contentColor = MaterialTheme.colorScheme.background,
+                                            containerColor = MaterialTheme.colorScheme.onBackground
+                                        )
+                                    ) {
+                                        Text(
+                                            stringResource(R.string.cancel),
+                                            style = MaterialTheme.typography.headlineSmall,
+                                            textAlign = TextAlign.Center,
+                                            modifier = Modifier.padding(start = 4.dp, end = 4.dp).weight(1f),
+                                        )
+                                    }
+
+                                }
+                            }
+                        }
+                    }
                 }
 
             }

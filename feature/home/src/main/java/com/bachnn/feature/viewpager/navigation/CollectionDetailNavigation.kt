@@ -7,6 +7,8 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptionsBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
+import com.bachnn.feature.collection.PHOTOGRAPHER
+import com.bachnn.feature.collection.PHOTO_DETAIL
 import com.bachnn.feature.collection.screen.PhotoScreen
 import com.bachnn.feature.collection.viewmodel.PhotoViewModel
 import kotlinx.serialization.Serializable
@@ -25,7 +27,7 @@ fun NavController.navigateCollectionDetail(
     }
 }
 
-fun NavGraphBuilder.buildCollectionDetail(navController: NavController) {
+fun NavGraphBuilder.buildCollectionDetail(navController: NavController, navigateHome: (Int, Any) -> Unit) {
     composable<CollectionDetailRoute> { backStackEntry ->
         val collectionId = backStackEntry.toRoute<CollectionDetailRoute>().collectionId
         val collectionName = backStackEntry.toRoute<CollectionDetailRoute>().collectionName
@@ -34,11 +36,11 @@ fun NavGraphBuilder.buildCollectionDetail(navController: NavController) {
                 factory.create(collectionId)
             }
         PhotoScreen(
-            onClickPhoto = {
-
+            onClickPhoto = { pixel ->
+                navigateHome(PHOTO_DETAIL, pixel)
             },
-            onClickPhotographer = {
-
+            onClickPhotographer = { photographerId ->
+                navigateHome(PHOTOGRAPHER, photographerId)
             },
             onBack = { navController.popBackStack() },
             viewModel = viewModel,

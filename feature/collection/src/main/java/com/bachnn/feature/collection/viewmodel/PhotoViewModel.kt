@@ -15,9 +15,11 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import androidx.core.net.toUri
+import com.bachnn.feature.collection.task.loadImagesFromMediaStore
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import dagger.hilt.android.qualifiers.ApplicationContext
 import java.io.File
 
 sealed interface PixelUiState {
@@ -30,6 +32,7 @@ sealed interface PixelUiState {
 @HiltViewModel(assistedFactory = PhotoViewModel.Factory::class)
 class PhotoViewModel @AssistedInject constructor(
     val firstPixelRepository: FirstPixelRepository,
+    @ApplicationContext context: Context,
     @Assisted val collectionId: String
 ) :
     ViewModel() {
@@ -46,11 +49,23 @@ class PhotoViewModel @AssistedInject constructor(
     init {
         viewModelScope.launch {
             pixelUiState = PixelUiState.Loading
+
             try {
-                val photos = if (collectionId != "") {
-                    firstPixelRepository.getPhotosByIdCollection(collectionId)
+                var photos: List<PixelsPhoto>? = null
+                if (collectionId == "Favorite") {
+                    photos = firstPixelRepository.getPhotosByFavorite()
+                } else if (collectionId == "Mark") {
+                    photos = firstPixelRepository.getPhotosByMark()
+                } else if (collectionId == "Follow") {
+                    photos = firstPixelRepository.getPhotosByFollow()
+                } else if (collectionId == "Download") {
+                    photos = loadImagesFromMediaStore(context)
                 } else {
-                    firstPixelRepository.getPhotos()
+                    photos = (if (collectionId != "") {
+                        firstPixelRepository.getPhotosByIdCollection(collectionId)
+                    } else {
+                        firstPixelRepository.getPhotos()
+                    })
                 }
                 pixelUiState = if (photos == null) {
                     PixelUiState.Error("List Photo is null !")

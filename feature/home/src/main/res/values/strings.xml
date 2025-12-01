@@ -28,4 +28,7 @@
     <string name="follow">Follow</string>
     <string name="all_time">All-time rank</string>
     <string name="month_rank">30-day rank</string>
+    <string name="unfollow">Unfollow</string>
+    <string name="user_action">User Actions</string>
+    <string name="cancel">Cancel</string>
 </resources>

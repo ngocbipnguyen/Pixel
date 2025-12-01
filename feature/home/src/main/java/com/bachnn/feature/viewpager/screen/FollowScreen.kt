@@ -384,7 +384,7 @@ fun ItemLeaderBroadCircle(
                             )
                         )
                         .clickable {
-                            navigateHome(PHOTOGRAPHER, item)
+                            navigateHome(PHOTOGRAPHER, item.id)
                         }, // Add clipping for better UI
                     contentScale = ContentScale.Crop,
                 )

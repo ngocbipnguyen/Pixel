@@ -154,7 +154,7 @@ fun SettingsScreen(
                         ) { page ->
                             when (pages[page]) {
                                 SettingsPage.PHOTO -> {
-                                    val viewModel: ContentViewModel = hiltViewModel<ContentViewModel, ContentViewModel.Factory>(key = user?.uid) {
+                                    val viewModel: ContentViewModel = hiltViewModel<ContentViewModel, ContentViewModel.Factory>(key = "${user?.uid}_photo") {
                                             factory -> factory.create(user=user!!, photographer = null)
                                     }
                                     ContentScreen(navigateHome = navigateHome, viewModel = viewModel)
@@ -162,7 +162,7 @@ fun SettingsScreen(
 
                                 SettingsPage.MARK -> {
                                     val viewModel: MarkViewModel = hiltViewModel<MarkViewModel, MarkViewModel.Factory>(
-                                        key = user?.uid
+                                        key = "${user?.uid}_mark"
                                     ) { factory ->
                                         factory.create(photographer = null, user = user)
                                     }

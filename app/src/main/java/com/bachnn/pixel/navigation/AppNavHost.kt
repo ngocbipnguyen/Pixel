@@ -17,6 +17,7 @@ import com.bachnn.feature.collection.INSPIRED_ACTION
 import com.bachnn.feature.collection.MEETUP
 import com.bachnn.feature.collection.PHOTOGRAPHER
 import com.bachnn.feature.collection.PHOTO_DETAIL
+import com.bachnn.feature.collection.PHOTO_LIST
 import com.bachnn.feature.collection.SETTINGS
 import com.bachnn.feature.collection.navigation.collectionBuild
 import com.bachnn.feature.viewpager.homeBuild
@@ -143,6 +144,15 @@ fun NavAppHost(navHostController: NavHostController) {
 //                PHOTOGRAPHER -> {
 //                    navHostController.navigateToPhotographer(123456)
 //                }
+                PHOTO_LIST -> {
+                    if (data is PixelsPhoto) {
+                        //todo : xử lý khi chuyển follow, favorite, mark, download.
+//                        navHostController
+                        navHostController.navigateCollectionDetail(data.photographer, data.photographer)
+
+                    }
+                }
+
 
             }
 
@@ -151,9 +161,40 @@ fun NavAppHost(navHostController: NavHostController) {
 
         buildPhotoDetail(navHostController)
 
-        buildPhotographer(navHostController)
+        buildPhotographer(navHostController) { action, data ->
+            when (action) {
+                PHOTO_DETAIL -> {
+                    if (data is PixelsPhoto) {
+                        navHostController.navigateToPhotoDetail(data)
+                    }
+                }
 
-        buildCollectionDetail(navHostController)
+                PHOTO_LIST -> {
+                    if (data is PixelsPhoto) {
+                        navHostController.navigateCollectionDetail(data.idCollection, data.photographer)
+                    }
+                }
+            }
+        }
+
+        buildCollectionDetail(navHostController) { action, data ->
+            when(action) {
+                PHOTO_DETAIL -> {
+                    if (data is PixelsPhoto) {
+                        navHostController.navigateToPhotoDetail(data)
+                    }
+                }
+
+                PHOTOGRAPHER -> {
+                    val photographerId: Long = if (data is String) {
+                        data.toLong()
+                    } else  {
+                        data as Long
+                    }
+                    navHostController.navigateToPhotographer(photographerId)
+                }
+            }
+        }
 
         buildSettings(navHostController)
 
@@ -161,7 +202,6 @@ fun NavAppHost(navHostController: NavHostController) {
 
         collectionBuild(
             onCollectionClick = {
-
             }
         ) {
 

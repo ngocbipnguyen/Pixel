@@ -14,3 +14,5 @@ const val FOLLOW_ACTION : Int = 6
 const val INSPIRED_ACTION : Int = 7
 const val FAVORITE_ACTION : Int = 8
 const val DOWNLOAD_ACTION : Int = 9
+
+const val PHOTO_LIST : Int = 10

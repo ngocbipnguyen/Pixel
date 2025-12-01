@@ -27,6 +27,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.bachnn.data.model.PixelsPhoto
 import com.bachnn.feature.collection.DOWNLOAD_ACTION
 import com.bachnn.feature.collection.FAVORITE_ACTION
+import com.bachnn.feature.collection.PHOTO_DETAIL
+import com.bachnn.feature.collection.PHOTO_LIST
 import com.bachnn.feature.collection.screen.PagerError
 import com.bachnn.feature.collection.screen.PagerLoading
 import com.bachnn.feature.viewpager.viewmodel.MarkUiState
@@ -71,10 +73,9 @@ fun MarkPage(modifier: Modifier, pixels: List<PixelsPhoto>, navigateHome: (Int, 
                 ItemMark(
                     modifier = Modifier,
                     url = pixel.src.medium,
-                    name = pixel.photographer
-                ) {
-
-                }
+                    pixelsPhoto = pixel,
+                    navigateHome = navigateHome
+                )
             }
 
 
@@ -117,7 +118,7 @@ fun MarkPage(modifier: Modifier, pixels: List<PixelsPhoto>, navigateHome: (Int, 
 
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable()
-fun ItemMark(modifier: Modifier, url: String, name: String, navigateHome: () -> Unit) {
+fun ItemMark(modifier: Modifier, url: String, pixelsPhoto: PixelsPhoto, navigateHome: (Int, Any) -> Unit) {
     Column(modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally) {
         GlideImage(
             model = url,
@@ -129,10 +130,10 @@ fun ItemMark(modifier: Modifier, url: String, name: String, navigateHome: () -> 
                 .height(150.dp)
                 .clip(RoundedCornerShape(8.dp))
                 .clickable {
-                    navigateHome
-                }
+                    navigateHome(PHOTO_LIST, pixelsPhoto)
+                },
         )
-        Text(name, style = MaterialTheme.typography.titleMedium)
+        Text(pixelsPhoto.photographer, style = MaterialTheme.typography.titleMedium)
     }
 }
 

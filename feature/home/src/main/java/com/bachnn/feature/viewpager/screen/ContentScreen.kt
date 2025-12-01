@@ -32,6 +32,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.bachnn.data.model.Photographer
 import com.bachnn.data.model.PixelsPhoto
 import com.bachnn.feature.collection.INSPIRED_ACTION
+import com.bachnn.feature.collection.PHOTO_DETAIL
 import com.bachnn.feature.collection.ShowImage
 import com.bachnn.feature.collection.ShowImageThumbnail
 import com.bachnn.feature.collection.pxToDp
@@ -53,7 +54,8 @@ fun ContentScreen(photographer: Photographer? = null, modifier: Modifier = Modif
                 if (photos.isNotEmpty()) {
                     ContentListPage(
                         pixelPhotos = photos,
-                        modifier = modifier.fillMaxSize().padding(4.dp)
+                        modifier = modifier.fillMaxSize().padding(4.dp),
+                        navigateHome = navigateHome
                     )
                 } else {
                     ContentPage(modifier.fillMaxSize(), navigateHome)
@@ -113,7 +115,7 @@ fun ContentPage(modifier: Modifier = Modifier, navigateHome: (Int, Any) -> Unit)
 
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
-fun ContentListPage(pixelPhotos: List<PixelsPhoto>, modifier: Modifier = Modifier) {
+fun ContentListPage(pixelPhotos: List<PixelsPhoto>, modifier: Modifier = Modifier, navigateHome: (Int, Any) -> Unit) {
     LazyVerticalStaggeredGrid(
         columns = StaggeredGridCells.Fixed(2),
         verticalItemSpacing = 4.dp,
@@ -133,7 +135,7 @@ fun ContentListPage(pixelPhotos: List<PixelsPhoto>, modifier: Modifier = Modifie
 //                )
                 Box(modifier = Modifier.clip(MaterialTheme.shapes.small)) {
                     ShowImageThumbnail(photo) {
-
+                        navigateHome(PHOTO_DETAIL, photo)
                     }
                 }
             }

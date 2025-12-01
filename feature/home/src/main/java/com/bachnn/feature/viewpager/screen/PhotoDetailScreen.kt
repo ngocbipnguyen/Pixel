@@ -117,7 +117,7 @@ fun PhotoDetailPage(
     var enabled by remember { mutableStateOf(true) }
     val animationDuration = 300
     val animatedAlpha: Float by animateFloatAsState(
-        if (enabled) 1f else 0.0f,
+        if (enabled) 0.0f else 1.0f,
         animationSpec = tween(durationMillis = animationDuration),
         label = "alpha"
     )
